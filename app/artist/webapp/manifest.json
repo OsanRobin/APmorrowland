@@ -43,7 +43,7 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": true,
+    "flexEnabled": false,
     "dependencies": {
       "minUI5Version": "1.143.2",
       "libs": {
@@ -91,21 +91,15 @@
         "async": true,
         "viewPath": "apm.artist.view"
       },
-      "routes": [
-        {
-          "name": "RouteView1",
-          "pattern": ":?query:",
-          "target": [
-            "TargetView1"
-          ]
-        }
-      ],
-      "targets": {
-        "TargetView1": {
-          "id": "View1",
-          "name": "View1"
-        }
-      }
+   "routes": [
+      { "name": "list", "pattern": "", "target": "List" },
+      { "name": "detail", "pattern": "artist/{artistID}", "target": "Detail" }
+    ],
+       "targets": {
+      "List": { "viewName": "List" },
+      "Detail": { "viewName": "Detail" }
+    }
+  
     },
     "rootView": {
       "viewName": "apm.artist.view.App",

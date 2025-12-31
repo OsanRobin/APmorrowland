@@ -1,0 +1,71 @@
+<mvc:View
+  controllerName="apm.artist.controller.List"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+
+  <Page title="Artists" class="sapUiContentPadding">
+
+    <subHeader>
+      <Toolbar>
+        <SearchField
+          id="search"
+          width="100%"
+          placeholder="Search artist name..."
+          liveChange="onSearch"
+          search="onSearchSubmit" />
+
+        <ToolbarSeparator/>
+
+        <Button
+          text="Filter/Sort"
+          icon="sap-icon://filter"
+          type="Transparent"
+          press="onOpenViewSettings" />
+      </Toolbar>
+    </subHeader>
+
+    <content>
+      <List
+        id="artistList"
+        items="{/Artists}"
+        growing="true"
+        growingScrollToLoad="true"
+        mode="SingleSelectMaster"
+        selectionChange="onSelectArtist">
+
+        <items>
+          <CustomListItem>
+            <VBox class="sapUiSmallMargin sapUiTinyMarginTop sapUiTinyMarginBottom">
+
+              <HBox justifyContent="SpaceBetween" alignItems="Center">
+                <VBox>
+                  <Title text="{name}" level="H4"/>
+                  <Text text="{= ${genre} + ' • ' + ${country} }"/>
+                </VBox>
+
+                <VBox alignItems="End">
+                  <ObjectNumber
+                    number="{popularityScore}"
+                    unit="Popularity"
+                    emphasized="true"/>
+                </VBox>
+              </HBox>
+
+              <!-- duidelijke visual voor popularity -->
+              <HBox alignItems="Center" class="sapUiTinyMarginTop">
+                <Text text="Popularity" class="sapUiTinyMarginEnd"/>
+                <ProgressIndicator
+                  percentValue="{popularityScore}"
+                  displayValue="{= ${popularityScore} + ' / 100' }"
+                  width="100%"/>
+              </HBox>
+
+            </VBox>
+          </CustomListItem>
+        </items>
+
+      </List>
+    </content>
+  </Page>
+
+</mvc:View>

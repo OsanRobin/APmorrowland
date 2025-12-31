@@ -1,0 +1,21 @@
+<mvc:View
+  controllerName="apm.artist.controller.Detail"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+
+  <Page title="Artist Detail" showNavButton="true" navButtonPress="onNavBack">
+    <content>
+      <ObjectHeader title="{name}">
+        <attributes>
+          <ObjectAttribute text="{genre}" />
+          <ObjectAttribute text="{country}" />
+        </attributes>
+      </ObjectHeader>
+
+      <Panel headerText="Bio" expandable="true" expanded="true">
+        <Text text="{bio}" wrapping="true"/>
+      </Panel>
+    </content>
+  </Page>
+
+</mvc:View>
