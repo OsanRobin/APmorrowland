@@ -33,6 +33,15 @@ sap.ui.define([
         : [];
       this._applyFiltersAndSort();
     },
+onItemPress: function (oEvent) {
+  const oItem = oEvent.getParameter("listItem");
+  const sID = oItem.getBindingContext().getProperty("ID");
+  this.getOwnerComponent().getRouter().navTo("detail", { artistID: sID });
+}
+
+
+
+,
 
     _applyFiltersAndSort: function () {
       const oList = this.byId("artistList");
@@ -45,14 +54,6 @@ sap.ui.define([
       if (this._aSorters.length) {
         oBinding.sort(this._aSorters);
       }
-    },
-
-    onSelectArtist: function (oEvent) {
-      const oItem = oEvent.getParameter("listItem");
-      if (!oItem) return;
-
-      const sID = oItem.getBindingContext().getProperty("ID");
-      this.getOwnerComponent().getRouter().navTo("detail", { artistID: sID });
     },
 
     onOpenViewSettings: function () {

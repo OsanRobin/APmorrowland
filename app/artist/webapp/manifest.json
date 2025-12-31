@@ -91,14 +91,16 @@
         "async": true,
         "viewPath": "apm.artist.view"
       },
-   "routes": [
-      { "name": "list", "pattern": "", "target": "List" },
-      { "name": "detail", "pattern": "artist/{artistID}", "target": "Detail" }
-    ],
-       "targets": {
-      "List": { "viewName": "List" },
-      "Detail": { "viewName": "Detail" }
-    }
+  "routes": [
+  { "name": "list", "pattern": "", "target": "List" },
+  { "name": "detail", "pattern": "artist/{artistID}", "target": "Detail" }
+
+],
+"targets": {
+  "List": { "viewName": "List" },
+  "Detail": { "viewName": "Detail" }
+}
+    
   
     },
     "rootView": {

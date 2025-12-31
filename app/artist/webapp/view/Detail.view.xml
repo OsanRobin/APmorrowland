@@ -3,18 +3,81 @@
   xmlns:mvc="sap.ui.core.mvc"
   xmlns="sap.m">
 
-  <Page title="Artist Detail" showNavButton="true" navButtonPress="onNavBack">
+  <Page
+    title="{name}"
+    showNavButton="true"
+    navButtonPress="onNavBack"
+    class="sapUiContentPadding">
+
     <content>
+
+      <!-- Header / profile -->
       <ObjectHeader title="{name}">
         <attributes>
-          <ObjectAttribute text="{genre}" />
-          <ObjectAttribute text="{country}" />
+          <ObjectAttribute title="Genre" text="{genre}" />
+          <ObjectAttribute title="Country" text="{country}" />
         </attributes>
       </ObjectHeader>
 
-      <Panel headerText="Bio" expandable="true" expanded="true">
+      <!-- Bio -->
+      <Panel headerText="Biography" expandable="true" expanded="true">
         <Text text="{bio}" wrapping="true"/>
       </Panel>
+
+      <!-- Performances -->
+      <Panel headerText="Planned Performances" expandable="true" expanded="true" class="sapUiSmallMarginTop">
+       <List items="{performances}" noDataText="No performances planned yet.">
+  <items>
+    <ObjectListItem
+      title="{stage/name}"
+      number="{startTime}"
+      numberUnit="{= ' - ' + ${endTime} }">
+      <attributes>
+        <ObjectAttribute text="{day/label}" />
+      </attributes>
+    </ObjectListItem>
+  </items>
+</List>
+
+      </Panel>
+
+      <!-- Reviews summary -->
+      <Panel headerText="Audience Feedback" expandable="true" expanded="true" class="sapUiSmallMarginTop">
+        <VBox class="sapUiSmallMarginBottom">
+          <HBox justifyContent="SpaceBetween" alignItems="Center">
+            <VBox>
+              <Title text="Average Rating" level="H4"/>
+              <Text text="{= ${view>/reviewCount} + ' review(s)'}"/>
+            </VBox>
+
+            <RatingIndicator
+              value="{view>/avgRating}"
+              maxValue="5"
+              editable="false"/>
+          </HBox>
+        </VBox>
+
+        <!-- Reviews list -->
+        <List
+          items="{reviews}"
+          noDataText="No reviews yet. Be the first to review!">
+
+          <items>
+            <ObjectListItem
+              title="{customerName}"
+              number="{rating}"
+              numberUnit="/5">
+
+              <attributes>
+                <ObjectAttribute text="{reviewDate}" />
+                <ObjectAttribute text="{comment}" />
+              </attributes>
+
+            </ObjectListItem>
+          </items>
+        </List>
+      </Panel>
+
     </content>
   </Page>
 

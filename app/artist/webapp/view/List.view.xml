@@ -4,7 +4,6 @@
   xmlns="sap.m">
 
   <Page title="Artists" class="sapUiContentPadding">
-
     <subHeader>
       <Toolbar>
         <SearchField
@@ -30,37 +29,21 @@
         items="{/Artists}"
         growing="true"
         growingScrollToLoad="true"
-        mode="SingleSelectMaster"
-        selectionChange="onSelectArtist">
+        mode="None"
+        itemPress="onItemPress">
 
         <items>
-          <CustomListItem>
-            <VBox class="sapUiSmallMargin sapUiTinyMarginTop sapUiTinyMarginBottom">
+          <CustomListItem type="Active">
+            <HBox justifyContent="SpaceBetween" alignItems="Center" width="100%" class="sapUiSmallMargin">
+              <VBox>
+                <Title text="{name}" level="H4"/>
+                <Text text="{= ${genre} + ' • ' + ${country} }"/>
+              </VBox>
 
-              <HBox justifyContent="SpaceBetween" alignItems="Center">
-                <VBox>
-                  <Title text="{name}" level="H4"/>
-                  <Text text="{= ${genre} + ' • ' + ${country} }"/>
-                </VBox>
-
-                <VBox alignItems="End">
-                  <ObjectNumber
-                    number="{popularityScore}"
-                    unit="Popularity"
-                    emphasized="true"/>
-                </VBox>
-              </HBox>
-
-              <!-- duidelijke visual voor popularity -->
-              <HBox alignItems="Center" class="sapUiTinyMarginTop">
-                <Text text="Popularity" class="sapUiTinyMarginEnd"/>
-                <ProgressIndicator
-                  percentValue="{popularityScore}"
-                  displayValue="{= ${popularityScore} + ' / 100' }"
-                  width="100%"/>
-              </HBox>
-
-            </VBox>
+              <VBox alignItems="End">
+                <ObjectNumber number="{popularityScore}" unit="Popularity" emphasized="true"/>
+              </VBox>
+            </HBox>
           </CustomListItem>
         </items>
 
