@@ -10,13 +10,13 @@ sap.ui.define([
 
   return Controller.extend("apm.artist.controller.Detail", {
     onInit: function () {
-      // ViewModel: computed rating info
+      
       this.getView().setModel(new JSONModel({
         avgRating: 0,
         reviewCount: 0
       }), "view");
 
-      // Review form model for dialog
+   
       this.getView().setModel(new JSONModel({
         customerName: "",
         rating: 0,
@@ -31,13 +31,10 @@ sap.ui.define([
         .attachPatternMatched(this._onMatched, this);
     },
 
-    /**
-     * Route matched: bind to selected Artist
-     * Route pattern expected: artist/{artistID}
-     */
+   
     _onMatched: function (oEvent) {
       const raw = oEvent.getParameter("arguments").artistID;
-      // Safety: if something weird arrives, clean it
+
       let s = raw || "";
       try { s = decodeURIComponent(s); } catch (e) {}
       const sCleanID = s
@@ -47,7 +44,7 @@ sap.ui.define([
         .replace(/\)$/, "")
         .replace(/['"]/g, "");
 
-      // IMPORTANT: string key => quotes
+
       const sPath = "/Artists(ID='" + sCleanID + "')";
 
       this.getView().bindElement({
@@ -61,9 +58,7 @@ sap.ui.define([
       });
     },
 
-    /**
-     * Recalculate average rating based on expanded reviews
-     */
+  
     _recalcRating: function () {
       const oCtx = this.getView().getBindingContext();
       const oVM = this.getView().getModel("view");
@@ -80,11 +75,9 @@ sap.ui.define([
       oVM.setProperty("/avgRating", Math.round(fAvg * 10) / 10); // 1 decimal
     },
 
-    /**
-     * Open the "Add Review" dialog
-     */
+    
     onOpenAddReview: async function () {
-      // reset dialog model
+      
       this.getView().getModel("review").setData({
         customerName: "",
         rating: 0,
@@ -109,10 +102,7 @@ sap.ui.define([
       }
     },
 
-    /**
-     * Save Review: POST to /Reviews
-     * After save -> refresh -> reviews list updates + avg recalculated
-     */
+   
     onSaveReview: async function () {
       const oReviewVM = this.getView().getModel("review");
       const oForm = oReviewVM.getData();
@@ -138,19 +128,19 @@ sap.ui.define([
 
       const sArtistID = oCtx.getProperty("ID");
 
-      // Payload - adjust field names if your Reviews entity differs
+
       const oPayload = {
         artist_ID: sArtistID,
         rating: iRating,
         comment: sComment,
-        reviewDate: new Date().toISOString().slice(0, 10), // YYYY-MM-DD
+        reviewDate: new Date().toISOString().slice(0, 10), 
         customerName: sName
       };
 
       try {
         const oModel = this.getView().getModel();
 
-        // Create via OData V4 list binding
+
         const oListBinding = oModel.bindList("/Reviews");
         const oCreated = oListBinding.create(oPayload);
         await oCreated.created();
@@ -161,10 +151,9 @@ sap.ui.define([
           this._oAddReviewDialog.close();
         }
 
-        // Force refresh so expanded reviews are re-fetched
         await oModel.refresh();
 
-        // Recalc in case view already has the updated nav data
+
         this._recalcRating();
       } catch (e) {
         console.error("Create review failed:", e);
@@ -172,9 +161,7 @@ sap.ui.define([
       }
     },
 
-    /**
-     * Back navigation
-     */
+   
     onNavBack: function () {
       const sPrev = History.getInstance().getPreviousHash();
       if (sPrev !== undefined) {

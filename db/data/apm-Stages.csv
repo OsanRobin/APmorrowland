@@ -1,1 +1,5 @@
-ID,name,createdAt,createdBy,modifiedAt,modifiedBy
+ID,name
+aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa,Mainstage
+bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb,Freedom
+cccccccc-cccc-cccc-cccc-cccccccccccc,Core
+dddddddd-dddd-dddd-dddd-dddddddddddd,Rave Cave

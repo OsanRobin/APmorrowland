@@ -1,0 +1,54 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+
+  <Dialog id="addArtistDialog" title="Add New Artist" stretchOnPhone="true">
+    <content>
+      <VBox class="sapUiSmallMargin">
+
+        <Label text="Name" required="true"/>
+        <Input value="{artistForm>/name}" maxLength="120"/>
+
+        <Label text="Genre" required="true" class="sapUiSmallMarginTop"/>
+        <Input value="{artistForm>/genre}" maxLength="60"/>
+
+        <Label text="Country / Nationality" required="true" class="sapUiSmallMarginTop"/>
+        <Input value="{artistForm>/country}" maxLength="60"/>
+
+        <Label text="Biography (optional)" class="sapUiSmallMarginTop"/>
+        <TextArea value="{artistForm>/bio}" growing="true" growingMaxLines="6" maxLength="2000"/>
+
+        <Toolbar class="sapUiSmallMarginTop">
+          <Title text="First Performance"/>
+        </Toolbar>
+
+        <Label text="Festival Day" required="true"/>
+        <Select
+          selectedKey="{artistForm>/dayID}"
+          items="{path: '/FestivalDays'}">
+          <core:Item key="{ID}" text="{label}"/>
+        </Select>
+
+        <Label text="Stage" required="true" class="sapUiSmallMarginTop"/>
+        <Select
+          selectedKey="{artistForm>/stageID}"
+          items="{path: '/Stages'}">
+          <core:Item key="{ID}" text="{name}"/>
+        </Select>
+
+        <Label text="Start time" required="true" class="sapUiSmallMarginTop"/>
+        <TimePicker value="{artistForm>/startTime}" displayFormat="HH:mm" valueFormat="HH:mm:ss"/>
+
+        <Label text="End time" required="true" class="sapUiSmallMarginTop"/>
+        <TimePicker value="{artistForm>/endTime}" displayFormat="HH:mm" valueFormat="HH:mm:ss"/>
+
+      </VBox>
+    </content>
+
+    <beginButton>
+      <Button text="Save" type="Emphasized" press="onSaveArtist"/>
+    </beginButton>
+    <endButton>
+      <Button text="Cancel" press="onCancelAddArtist"/>
+    </endButton>
+  </Dialog>
+
+</core:FragmentDefinition>

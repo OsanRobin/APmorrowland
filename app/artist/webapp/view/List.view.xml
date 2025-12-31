@@ -20,6 +20,8 @@
           icon="sap-icon://filter"
           type="Transparent"
           press="onOpenViewSettings" />
+          <Button text="Add Artist" icon="sap-icon://add" type="Emphasized" press="onOpenAddArtist"/>
+
       </Toolbar>
     </subHeader>
 

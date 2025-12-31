@@ -3,11 +3,28 @@ sap.ui.define([
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
   "sap/ui/model/Sorter",
+  "sap/ui/model/json/JSONModel",
+  "sap/ui/core/Fragment",
+  "sap/m/MessageBox",
+  "sap/m/MessageToast",
   "sap/m/ViewSettingsDialog",
   "sap/m/ViewSettingsItem",
   "sap/m/ViewSettingsFilterItem"
-], function (Controller, Filter, FilterOperator, Sorter, ViewSettingsDialog, ViewSettingsItem, ViewSettingsFilterItem) {
+], function (
+  Controller,
+  Filter,
+  FilterOperator,
+  Sorter,
+  JSONModel,
+  Fragment,
+  MessageBox,
+  MessageToast,
+  ViewSettingsDialog,
+  ViewSettingsItem,
+  ViewSettingsFilterItem
+) {
   "use strict";
+
 
   return Controller.extend("apm.artist.controller.List", {
     onInit: function () {
@@ -15,6 +32,19 @@ sap.ui.define([
       this._aSearchFilters = [];
       this._aVsdFilters = [];
       this._aSorters = [];
+this.getView().setModel(new JSONModel({
+  name: "",
+  genre: "",
+  country: "",
+  bio: "",
+  dayID: "",
+  stageID: "",
+  startTime: "18:00:00",
+  endTime: "19:00:00"
+}), "artistForm");
+
+
+  this._oAddArtistDialog = null;
     },
 
     onSearch: function (oEvent) {
@@ -42,6 +72,84 @@ onItemPress: function (oEvent) {
 
 
 ,
+onOpenAddArtist: async function () {
+  this.getView().getModel("artistForm").setData({
+    name: "",
+    genre: "",
+    country: "",
+    bio: "",
+    dayID: "",
+    stageID: "",
+    startTime: "18:00:00",
+    endTime: "19:00:00"
+  });
+
+  if (!this._oAddArtistDialog) {
+    this._oAddArtistDialog = await Fragment.load({
+      id: this.getView().getId(),
+      name: "apm.artist.view.fragments.AddArtistDialog",
+      controller: this
+    });
+    this.getView().addDependent(this._oAddArtistDialog);
+  }
+
+  this._oAddArtistDialog.open();
+},
+
+onCancelAddArtist: function () {
+  if (this._oAddArtistDialog) this._oAddArtistDialog.close();
+},
+onSaveArtist: async function () {
+  const oForm = this.getView().getModel("artistForm").getData();
+  const oModel = this.getView().getModel();
+
+  const sName = (oForm.name || "").trim();
+  const sGenre = (oForm.genre || "").trim();
+  const sCountry = (oForm.country || "").trim();
+
+  if (!sName || !sGenre || !sCountry) {
+    MessageBox.warning("Please fill in Name, Genre and Country.");
+    return;
+  }
+  if (!oForm.dayID || !oForm.stageID || !oForm.startTime || !oForm.endTime) {
+    MessageBox.warning("Please select Day, Stage, Start time and End time.");
+    return;
+  }
+
+  try {
+    const oArtists = oModel.bindList("/Artists");
+    const oArtistCtx = oArtists.create({
+      name: sName,
+      genre: sGenre,
+      country: sCountry,
+      bio: (oForm.bio || "").trim(),
+      popularityScore: 0
+    });
+    await oArtistCtx.created();
+
+    const sArtistID = oArtistCtx.getProperty("ID");
+
+
+    const oPerfs = oModel.bindList("/Performances");
+    const oPerfCtx = oPerfs.create({
+      artist_ID: sArtistID,
+      day_ID: oForm.dayID,
+      stage_ID: oForm.stageID,
+      startTime: oForm.startTime,
+      endTime: oForm.endTime
+    });
+    await oPerfCtx.created();
+
+    MessageToast.show("Artist created with first performance.");
+
+    this._oAddArtistDialog.close();
+
+    await oModel.refresh();
+  } catch (e) {
+    console.error(e);
+    MessageBox.error("Could not create artist/performance. Check service and field names.");
+  }
+},
 
     _applyFiltersAndSort: function () {
       const oList = this.byId("artistList");
