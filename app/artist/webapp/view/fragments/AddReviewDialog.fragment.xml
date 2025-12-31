@@ -1,0 +1,23 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+  <Dialog id="addReviewDialog" title="Add Review" stretchOnPhone="true">
+    <content>
+      <VBox class="sapUiSmallMargin">
+        <Label text="Your name" required="true"/>
+        <Input value="{review>/customerName}" placeholder="e.g. Alex"/>
+
+        <Label text="Rating" required="true" class="sapUiSmallMarginTop"/>
+        <RatingIndicator value="{review>/rating}" maxValue="5" editable="true"/>
+
+        <Label text="Comment (optional)" class="sapUiSmallMarginTop"/>
+        <TextArea value="{review>/comment}" growing="true" growingMaxLines="5" placeholder="Write your comment..."/>
+      </VBox>
+    </content>
+
+    <beginButton>
+      <Button text="Save" type="Emphasized" press="onSaveReview"/>
+    </beginButton>
+    <endButton>
+      <Button text="Cancel" press="onCancelReview"/>
+    </endButton>
+  </Dialog>
+</core:FragmentDefinition>

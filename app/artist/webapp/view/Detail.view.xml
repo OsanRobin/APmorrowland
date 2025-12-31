@@ -10,8 +10,6 @@
     class="sapUiContentPadding">
 
     <content>
-
-      <!-- Header / profile -->
       <ObjectHeader title="{name}">
         <attributes>
           <ObjectAttribute title="Genre" text="{genre}" />
@@ -19,29 +17,36 @@
         </attributes>
       </ObjectHeader>
 
-      <!-- Bio -->
-      <Panel headerText="Biography" expandable="true" expanded="true">
-        <Text text="{bio}" wrapping="true"/>
-      </Panel>
+      <Panel headerText="Audience Feedback" expandable="true" expanded="true" class="sapUiSmallMarginTop">
 
-      <!-- Performances -->
-      <Panel headerText="Planned Performances" expandable="true" expanded="true" class="sapUiSmallMarginTop">
-       <List items="{performances}" noDataText="No performances planned yet.">
-  <items>
-    <ObjectListItem
-      title="{stage/name}"
-      number="{startTime}"
-      numberUnit="{= ' - ' + ${endTime} }">
-      <attributes>
-        <ObjectAttribute text="{day/label}" />
-      </attributes>
-    </ObjectListItem>
-  </items>
-</List>
+  <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiSmallMarginBottom">
+    <VBox>
+      <Title text="Average Rating" level="H4"/>
+      <Text text="{= ${view>/reviewCount} + ' review(s)'}"/>
+    </VBox>
 
-      </Panel>
+    <RatingIndicator value="{view>/avgRating}" maxValue="5" editable="false"/>
+  </HBox>
 
-      <!-- Reviews summary -->
+  <Toolbar>
+    <Title text="Reviews" level="H5"/>
+    <ToolbarSpacer/>
+    <Button text="Add Review" icon="sap-icon://add" type="Emphasized" press="onOpenAddReview"/>
+  </Toolbar>
+
+  <List items="{reviews}" noDataText="No reviews yet. Be the first to review!">
+    <items>
+      <ObjectListItem title="{customerName}" number="{rating}" numberUnit="/5">
+        <attributes>
+          <ObjectAttribute text="{reviewDate}" />
+          <ObjectAttribute text="{comment}" />
+        </attributes>
+      </ObjectListItem>
+    </items>
+  </List>
+
+</Panel>
+
       <Panel headerText="Audience Feedback" expandable="true" expanded="true" class="sapUiSmallMarginTop">
         <VBox class="sapUiSmallMarginBottom">
           <HBox justifyContent="SpaceBetween" alignItems="Center">
@@ -57,7 +62,6 @@
           </HBox>
         </VBox>
 
-        <!-- Reviews list -->
         <List
           items="{reviews}"
           noDataText="No reviews yet. Be the first to review!">
