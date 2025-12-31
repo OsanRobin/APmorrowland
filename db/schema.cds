@@ -9,6 +9,9 @@ entity Artists : cuid, managed {
   popularityScore : Integer;
   bio             : String(2000);
 
+  spotifyUrl      : String(255);
+  instagramUrl    : String(255);
+
   reviews         : Composition of many Reviews on reviews.artist = $self;
   performances    : Association to many Performances on performances.artist = $self;
 }

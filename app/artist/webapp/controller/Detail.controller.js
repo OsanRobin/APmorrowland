@@ -10,13 +10,13 @@ sap.ui.define([
 
   return Controller.extend("apm.artist.controller.Detail", {
     onInit: function () {
-      
+      // View model for calculated values
       this.getView().setModel(new JSONModel({
         avgRating: 0,
         reviewCount: 0
       }), "view");
 
-   
+      // View model for add-review dialog
       this.getView().setModel(new JSONModel({
         customerName: "",
         rating: 0,
@@ -31,12 +31,13 @@ sap.ui.define([
         .attachPatternMatched(this._onMatched, this);
     },
 
-   
     _onMatched: function (oEvent) {
       const raw = oEvent.getParameter("arguments").artistID;
 
       let s = raw || "";
       try { s = decodeURIComponent(s); } catch (e) {}
+
+      // cleanup (in case something weird got passed)
       const sCleanID = s
         .split("/")
         .pop()
@@ -44,13 +45,24 @@ sap.ui.define([
         .replace(/\)$/, "")
         .replace(/['"]/g, "");
 
-
       const sPath = "/Artists(ID='" + sCleanID + "')";
 
       this.getView().bindElement({
         path: sPath,
         parameters: {
-          "$expand": "reviews,performances($expand=day,stage)"
+          // IMPORTANT: select extra properties so bindings won't fail in OData V4
+          $select: [
+            "ID",
+            "name",
+            "genre",
+            "country",
+            "bio",
+            "popularityScore",
+            "spotifyUrl",
+            "instagramUrl"
+          ].join(","),
+
+          $expand: "reviews,performances($expand=day,stage)"
         },
         events: {
           dataReceived: () => this._recalcRating()
@@ -58,7 +70,28 @@ sap.ui.define([
       });
     },
 
-  
+    onOpenSpotify: function () {
+      const oCtx = this.getView().getBindingContext();
+      const sUrl = oCtx ? oCtx.getProperty("spotifyUrl") : "";
+
+      if (!sUrl) {
+        MessageToast.show("No Spotify link configured for this artist.");
+        return;
+      }
+      window.open(sUrl, "_blank");
+    },
+
+    onOpenInstagram: function () {
+      const oCtx = this.getView().getBindingContext();
+      const sUrl = oCtx ? oCtx.getProperty("instagramUrl") : "";
+
+      if (!sUrl) {
+        MessageToast.show("No Instagram link configured for this artist.");
+        return;
+      }
+      window.open(sUrl, "_blank");
+    },
+
     _recalcRating: function () {
       const oCtx = this.getView().getBindingContext();
       const oVM = this.getView().getModel("view");
@@ -72,12 +105,10 @@ sap.ui.define([
         : 0;
 
       oVM.setProperty("/reviewCount", iCount);
-      oVM.setProperty("/avgRating", Math.round(fAvg * 10) / 10); // 1 decimal
+      oVM.setProperty("/avgRating", Math.round(fAvg * 10) / 10);
     },
 
-    
     onOpenAddReview: async function () {
-      
       this.getView().getModel("review").setData({
         customerName: "",
         rating: 0,
@@ -102,7 +133,6 @@ sap.ui.define([
       }
     },
 
-   
     onSaveReview: async function () {
       const oReviewVM = this.getView().getModel("review");
       const oForm = oReviewVM.getData();
@@ -128,20 +158,18 @@ sap.ui.define([
 
       const sArtistID = oCtx.getProperty("ID");
 
-
       const oPayload = {
         artist_ID: sArtistID,
         rating: iRating,
         comment: sComment,
-        reviewDate: new Date().toISOString().slice(0, 10), 
+        reviewDate: new Date().toISOString().slice(0, 10),
         customerName: sName
       };
 
       try {
         const oModel = this.getView().getModel();
-
-
         const oListBinding = oModel.bindList("/Reviews");
+
         const oCreated = oListBinding.create(oPayload);
         await oCreated.created();
 
@@ -152,8 +180,6 @@ sap.ui.define([
         }
 
         await oModel.refresh();
-
-
         this._recalcRating();
       } catch (e) {
         console.error("Create review failed:", e);
@@ -161,7 +187,6 @@ sap.ui.define([
       }
     },
 
-   
     onNavBack: function () {
       const sPrev = History.getInstance().getPreviousHash();
       if (sPrev !== undefined) {

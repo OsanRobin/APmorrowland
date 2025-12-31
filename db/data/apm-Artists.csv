@@ -1,8 +1,8 @@
-ID,name,genre,country,popularityScore,bio,createdAt,createdBy,modifiedAt,modifiedBy
-3fa85f64-5717-4562-b3fc-2c963f66afa6,Nova Pulse,Techno,BE,88,"High-energy techno act known for hypnotic festival sets.",2025-01-10T09:00:00Z,admin,2025-01-12T14:30:00Z,admin
-2c1a7d5e-2f12-4c7a-9f2c-6c8c3bb0a1b1,Crystal Bloom,Pop,SE,74,"Scandinavian pop artist with dreamy vocals.",2025-01-10T09:45:00Z,admin,2025-01-13T10:50:00Z,admin
-b7d3f2c1-8e6a-4f27-b0c4-6a6c9f5b9f2a,Skyline DJs,House,NL,76,"House duo bringing uplifting vibes and melodic grooves.",2025-01-10T09:05:00Z,admin,2025-01-11T16:10:00Z,admin
-5a6b7c8d-1111-4a2b-9c3d-222233334444,Neon Riot,EDM,DE,92,"Big-room EDM act famous for explosive drops and visuals.",2025-01-10T09:10:00Z,admin,2025-01-13T18:45:00Z,admin
-9d1c2a3b-4444-4f55-8a66-777788889999,Luna & Co,Pop,US,69,"Pop act blending catchy hooks with electronic elements.",2025-01-10T09:15:00Z,admin,2025-01-12T11:20:00Z,admin
-1f2e3d4c-aaaa-4bbb-8ccc-ddddeeeeffff,Bass Alchemist,Hardstyle,BE,84,"Hardstyle producer with relentless kicks and dark energy.",2025-01-10T09:20:00Z,admin,2025-01-14T20:00:00Z,admin
-6e5d4c3b-1234-4a5b-9c6d-abcdefabcdef,Echo Valley,Indie,UK,72,"Indie band known for atmospheric soundscapes.",2025-01-10T09:25:00Z,admin,2025-01-12T15:40:00Z,admin
+ID,name,genre,country,popularityScore,bio,spotifyUrl,instagramUrl
+3fa85f64-5717-4562-b3fc-2c963f66afa6,Nova Pulse,Techno,BE,88,"High-energy techno act known for hypnotic festival sets.","https://open.spotify.com/artist/0","https://instagram.com/novapulse"
+2c1a7d5e-2f12-4c7a-9f2c-6c8c3bb0a1b1,Crystal Bloom,Pop,SE,74,"Scandinavian pop artist with dreamy vocals.","https://open.spotify.com/artist/1","https://instagram.com/crystalbloom"
+b7d3f2c1-8e6a-4f27-b0c4-6a6c9f5b9f2a,Skyline DJs,House,NL,76,"House duo bringing uplifting vibes and melodic grooves.","https://open.spotify.com/artist/2","https://instagram.com/skylinedjs"
+5a6b7c8d-1111-4a2b-9c3d-222233334444,Neon Riot,EDM,DE,92,"Big-room EDM act famous for explosive drops and visuals.","https://open.spotify.com/artist/3","https://instagram.com/neonriot"
+9d1c2a3b-4444-4f55-8a66-777788889999,Luna & Co,Pop,US,69,"Pop act blending catchy hooks with electronic elements.","https://open.spotify.com/artist/4","https://instagram.com/lunaandco"
+1f2e3d4c-aaaa-4bbb-8ccc-ddddeeeeffff,Bass Alchemist,Hardstyle,BE,84,"Hardstyle producer with relentless kicks and dark energy.","https://open.spotify.com/artist/5","https://instagram.com/bassalchemist"
+6e5d4c3b-1234-4a5b-9c6d-abcdefabcdef,Echo Valley,Indie,UK,72,"Indie band known for atmospheric soundscapes.","https://open.spotify.com/artist/6","https://instagram.com/echovalley"
