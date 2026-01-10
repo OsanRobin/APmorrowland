@@ -1,0 +1,49 @@
+<mvc:View
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:form="sap.ui.layout.form"
+  controllerName="apm.orders.controller.OrderDetail">
+
+  <Page title="Order detail" showNavButton="true" navButtonPress="onBack">
+    <content>
+
+      <form:SimpleForm editable="true">
+        <Label text="Klant" />
+        <Text text="{customer/name}" />
+
+        <Label text="Orderdatum" />
+        <Text text="{orderDate}" />
+
+        <Label text="Status" />
+        <Text text="{status}" />
+
+        <Label text="Type" />
+        <Text text="{type}" />
+
+        <Label text="Totaal" />
+        <Text text="{total}" />
+      </form:SimpleForm>
+
+      <Table headerText="Items" items="{ path: 'items' }">
+        <columns>
+          <Column><Text text="Naam" /></Column>
+          <Column><Text text="Aantal" /></Column>
+          <Column><Text text="Unitprijs" /></Column>
+          <Column><Text text="Totaal" /></Column>
+        </columns>
+
+        <items>
+          <ColumnListItem>
+            <cells>
+              <Text text="{name}" />
+              <Text text="{qty}" />
+              <Text text="{unitPrice}" />
+              <Text text="{lineTotal}" />
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+
+    </content>
+  </Page>
+</mvc:View>

@@ -1,7 +1,9 @@
-<mvc:View controllerName="apm.orders.controller.App"
-    displayBlock="true"
-    xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <App id="app">
-    </App>
+<mvc:View
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:f="sap.f">
+
+  <f:FlexibleColumnLayout
+    id="fcl_"
+    layout="OneColumn" />
+
 </mvc:View>

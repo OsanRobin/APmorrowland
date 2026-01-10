@@ -2,6 +2,7 @@ namespace apm;
 
 using { cuid, managed } from '@sap/cds/common';
 
+
 entity Artists : cuid, managed {
   name            : String(120);
   genre           : String(60);
@@ -39,4 +40,44 @@ entity Performances : cuid, managed {
   stage     : Association to Stages;
   startTime : Time;
   endTime   : Time;
+}
+
+
+
+type OrderStatus : String enum {
+  OPEN;
+  PAID;
+  CANCELLED;
+}
+
+type OrderType : String enum {
+  TICKETS;
+  MERCH;
+  FOOD;
+}
+
+entity Customers : cuid, managed {
+  name  : String(120);
+  email : String(160);
+}
+
+entity Orders : cuid, managed {
+  orderDate : Date;
+  status    : OrderStatus;
+  type      : OrderType;
+
+  customer  : Association to Customers;
+
+  items     : Composition of many OrderItems on items.order = $self;
+
+  total     : Decimal(9,2);
+}
+
+entity OrderItems : cuid, managed {
+  order     : Association to Orders;
+
+  name      : String(120);
+  qty       : Integer;
+  unitPrice : Decimal(9,2);
+  lineTotal : Decimal(9,2);
 }

@@ -1,6 +1,6 @@
 {
   "generationParameters": {
-    "generationDate": "Sat Dec 27 2025 17:37:32 GMT+0000 (Coordinated Universal Time)",
+    "generationDate": "Sat Jan 10 2026 14:41:51 GMT+0000 (Coordinated Universal Time)",
     "generatorPlatform": "SAP Business Application Studio",
     "serviceType": "Local CAP",
     "metadataFilename": "",
@@ -19,6 +19,6 @@
     "template": "Basic V4",
     "generatorName": "SAP Fiori Application Generator",
     "entityRelatedConfig": [],
-    "launchText": "To launch the generated app, start your CAP project:  and navigate to the following location in your browser:\n\nhttp://localhost:4004/orders/webapp/index.html"
+    "launchText": "To launch the generated app, start your CAP project:  and navigate to the following location in your browser:\n\nhttp://localhost:4004/apm.orders/index.html"
   }
 }

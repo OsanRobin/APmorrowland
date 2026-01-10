@@ -1,0 +1,8 @@
+ID,order_ID,name,qty,unitPrice,lineTotal,createdAt,createdBy,modifiedAt,modifiedBy
+oi1-aaaa-1111-4bbb-8ccc-000000000001,o1000001-aaaa-4bbb-8ccc-000000000001,VIP Ticket,2,150.00,300.00,2025-01-12T10:01:00Z,admin,2025-01-12T10:01:00Z,admin
+oi2-aaaa-2222-4bbb-8ccc-000000000002,o1000001-aaaa-4bbb-8ccc-000000000001,Service Fee,1,20.00,20.00,2025-01-12T10:01:00Z,admin,2025-01-12T10:01:00Z,admin
+
+oi3-bbbb-1111-4ccc-8ddd-000000000003,o1000002-bbbb-4ccc-8ddd-000000000002,Festival T-Shirt,1,35.00,35.00,2025-01-12T10:11:00Z,admin,2025-01-12T10:11:00Z,admin
+oi4-bbbb-2222-4ccc-8ddd-000000000004,o1000002-bbbb-4ccc-8ddd-000000000002,Glowsticks Pack,2,30.00,60.00,2025-01-12T10:11:00Z,admin,2025-01-12T10:11:00Z,admin
+
+oi5-cccc-1111-4ddd-8eee-000000000005,o1000003-cccc-4ddd-8eee-000000000003,Drink Tokens,3,15.00,45.00,2025-01-12T10:21:00Z,admin,2025-01-12T10:21:00Z,admin

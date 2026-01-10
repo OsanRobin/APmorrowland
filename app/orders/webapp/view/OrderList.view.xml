@@ -1,0 +1,56 @@
+<mvc:View
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  controllerName="apm.orders.controller.OrderList">
+
+  <Page title="Orders">
+    <content>
+
+      <Toolbar>
+        <SearchField
+          width="20rem"
+          placeholder="Zoek op klant"
+          search="onSearch" />
+
+        <ToolbarSpacer />
+
+        <Select width="10rem" change="onFilterStatus">
+          <items>
+            <core:Item key="" text="Alle statussen" />
+            <core:Item key="OPEN" text="Open" />
+            <core:Item key="PAID" text="Betaald" />
+            <core:Item key="CANCELLED" text="Geannuleerd" />
+          </items>
+        </Select>
+
+        <Select width="10rem" change="onFilterType">
+          <items>
+            <core:Item key="" text="Alle types" />
+            <core:Item key="TICKETS" text="Tickets" />
+            <core:Item key="MERCH" text="Merch" />
+            <core:Item key="FOOD" text="Food & Drinks" />
+          </items>
+        </Select>
+
+        <Button icon="sap-icon://sort" press="onSortByDate" />
+
+        <Button text="Nieuwe order" type="Emphasized" press="onCreateOrder" />
+      </Toolbar>
+
+      <List
+        id="ordersList"
+        mode="SingleSelectMaster"
+        items="{ path: '/Orders' }"
+        selectionChange="onSelectOrder">
+
+        <StandardListItem
+          title="{customer/name}"
+          description="{type} • {status}"
+          info="{total}" />
+
+      </List>
+
+    </content>
+  </Page>
+</mvc:View>

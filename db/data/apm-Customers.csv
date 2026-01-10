@@ -1,0 +1,4 @@
+ID,name,email,createdAt,createdBy,modifiedAt,modifiedBy
+c1a11111-aaaa-4bbb-8ccc-111122223333,Alex Vermeulen,alex.vermeulen@mail.com,2025-01-10T09:00:00Z,admin,2025-01-10T09:00:00Z,admin
+c2b22222-bbbb-4ccc-8ddd-444455556666,Sarah De Smet,sarah.desmet@mail.com,2025-01-10T09:05:00Z,admin,2025-01-10T09:05:00Z,admin
+c3c33333-cccc-4ddd-8eee-777788889999,Tom Janssens,tom.janssens@mail.com,2025-01-10T09:10:00Z,admin,2025-01-10T09:10:00Z,admin
