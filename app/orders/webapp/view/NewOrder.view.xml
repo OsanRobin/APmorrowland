@@ -1,0 +1,52 @@
+<mvc:View
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core"
+  xmlns:form="sap.ui.layout.form"
+  controllerName="apm.orders.controller.NewOrder">
+
+  <Page title="Nieuwe Order" showNavButton="true" navButtonPress="onCancel">
+    <content>
+
+      <form:SimpleForm editable="true" layout="ResponsiveGridLayout">
+        <Label text="Klant" />
+        <Select
+          id="customerSelect"
+          width="100%"
+          selectedKey="{vm>/customerId}"
+          change="onCustomerChange"
+          items="{ path: '/Customers' }">
+          <core:Item key="{ID}" text="{name}" />
+        </Select>
+
+        <Label text="Ordertype" />
+        <Select selectedKey="{vm>/type}" change="onTypeChange">
+          <core:Item key="TICKETS" text="Tickets" />
+          <core:Item key="MERCH" text="Merch" />
+          <core:Item key="FOOD" text="Food &amp; Drinks" />
+        </Select>
+
+        <Label text="Item naam" />
+        <Input value="{vm>/itemName}" liveChange="onRecalc" />
+
+        <Label text="Aantal" />
+        <StepInput value="{vm>/qty}" min="1" change="onRecalc" />
+
+        <Label text="Unit price" />
+        <Input value="{vm>/unitPrice}" type="Number" liveChange="onRecalc" />
+
+        <Label text="Subtotaal" />
+        <ObjectNumber number="{vm>/lineTotal}" unit="EUR" />
+
+        <Label text="Totaal" />
+        <ObjectNumber number="{vm>/total}" unit="EUR" />
+      </form:SimpleForm>
+
+      <Toolbar class="sapUiSmallMarginTop">
+        <ToolbarSpacer />
+        <Button text="Aanmaken" type="Emphasized" press="onSubmit" />
+      </Toolbar>
+
+    </content>
+  </Page>
+</mvc:View>

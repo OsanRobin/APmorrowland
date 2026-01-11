@@ -7,94 +7,80 @@ sap.ui.define([
   "use strict";
 
   return Controller.extend("apm.orders.controller.OrderList", {
+
     onInit() {
-      this._sSearch = "";
-      this._sStatus = "";
-      this._sType = "";
+      this._aFilters = [];
       this._bSortDesc = true;
     },
 
     onSearch(oEvent) {
-      this._sSearch = (oEvent.getParameter("newValue") || "").trim();
-      this._applyAll();
+      const sQuery = oEvent.getParameter("query") || "";
+      const aFilters = [];
+
+      if (sQuery.trim()) {
+        aFilters.push(new Filter("customer/name", FilterOperator.Contains, sQuery.trim()));
+      }
+
+      this._aFilters = this._aFilters.filter(f => f.sPath !== "customer/name").concat(aFilters);
+      this._applyAllFilters();
     },
-onPressOrder(oEvent) {
-  const oItem = oEvent.getSource();
-  const oCtx = oItem.getBindingContext();
-  if (!oCtx) return;
-
-  const sID = oCtx.getProperty("ID");
-
-
-  const oFCL = this.getOwnerComponent().getRootControl().byId("ordersFcl");
-  if (oFCL) {
-    oFCL.setLayout("TwoColumnsMidExpanded");
-  }
-
-  this.getOwnerComponent().getRouter().navTo("OrderDetail", { ID: sID });
-}
-,
-
 
     onFilterStatus(oEvent) {
-      this._sStatus = oEvent.getSource().getSelectedKey();
-      this._applyAll();
+      const sKey = oEvent.getSource().getSelectedKey();
+      this._aFilters = this._aFilters.filter(f => f.sPath !== "status");
+      if (sKey) this._aFilters.push(new Filter("status", FilterOperator.EQ, sKey));
+      this._applyAllFilters();
     },
 
     onFilterType(oEvent) {
-      this._sType = oEvent.getSource().getSelectedKey();
-      this._applyAll();
+      const sKey = oEvent.getSource().getSelectedKey();
+      this._aFilters = this._aFilters.filter(f => f.sPath !== "type");
+      if (sKey) this._aFilters.push(new Filter("type", FilterOperator.EQ, sKey));
+      this._applyAllFilters();
     },
 
-    _applyAll() {
-      const aFilters = [];
-
-      if (this._sSearch) {
-        aFilters.push(new Filter("customer/name", FilterOperator.Contains, this._sSearch));
-      }
-      if (this._sStatus) {
-        aFilters.push(new Filter("status", FilterOperator.EQ, this._sStatus));
-      }
-      if (this._sType) {
-        aFilters.push(new Filter("type", FilterOperator.EQ, this._sType));
-      }
-
+    _applyAllFilters() {
       const oList = this.byId("ordersList");
-      const oBinding = oList && oList.getBinding("items");
-      if (oBinding) {
-        oBinding.filter(aFilters);
-      }
+      if (!oList) return;
+
+      const oBinding = oList.getBinding("items");
+      if (!oBinding) return;
+
+      oBinding.filter(this._aFilters);
     },
 
     onSortByDate() {
+      const oList = this.byId("ordersList");
+      if (!oList) return;
+
+      const oBinding = oList.getBinding("items");
+      if (!oBinding) return;
+
       this._bSortDesc = !this._bSortDesc;
-      const oBinding = this.byId("ordersList").getBinding("items");
       oBinding.sort(new Sorter("orderDate", this._bSortDesc));
     },
 
-    onSelectOrder(oEvent) {
-      const oItem = oEvent.getParameter("listItem");
-      const oCtx = oItem && oItem.getBindingContext();
+
+    onPressOrder(oEvent) {
+      const oItem = oEvent.getSource();
+      const oCtx = oItem.getBindingContext();
       if (!oCtx) return;
 
       const sID = oCtx.getProperty("ID");
+
+      const oFCL = this.getOwnerComponent().getRootControl().byId("ordersFcl");
+      if (oFCL) oFCL.setLayout("TwoColumnsMidExpanded");
+
       this.getOwnerComponent().getRouter().navTo("OrderDetail", { ID: sID });
     },
 
     onCreateOrder() {
-      const oList = this.byId("ordersList");
-      const oBinding = oList.getBinding("items");
+  const oFCL = this.getOwnerComponent().getRootControl().byId("ordersFcl");
+  if (oFCL) oFCL.setLayout("TwoColumnsMidExpanded");
 
-      const oCtx = oBinding.create({
-        orderDate: new Date(),
-        status: "OPEN",
-        type: "TICKETS",
-        total: 0
-      });
+  this.getOwnerComponent().getRouter().navTo("NewOrder");
+}
 
-      oCtx.created().then(() => {
-        this.getOwnerComponent().getRouter().navTo("OrderDetail", { ID: oCtx.getProperty("ID") });
-      });
-    }
+
   });
 });

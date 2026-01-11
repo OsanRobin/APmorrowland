@@ -36,32 +36,24 @@
       }
     },
     "routing": {
-      "config": {
-        "routerClass": "sap.f.routing.Router",
-        "viewType": "XML",
-        "viewPath": "apm.orders.view",
-        "controlId": "ordersFcl",
-        "controlAggregation": "beginColumnPages",
-        "transition": "slide",
-        "async": true
-      },
-      "routes": [
-        { "name": "OrderList", "pattern": "", "target": ["OrderList"] },
-        { "name": "OrderDetail", "pattern": "orders/{ID}", "target": ["OrderList", "OrderDetail"] }
-      ],
-      "targets": {
-        "OrderList": {
-          "viewName": "OrderList",
-          "controlAggregation": "beginColumnPages"
-        },
-        "OrderDetail": {
-          "viewName": "OrderDetail",
-          "controlAggregation": "midColumnPages"
-        }
-      },
-      "bypassed": {
-        "target": "OrderList"
-      }
+  "config": {
+    "routerClass": "sap.f.routing.Router",
+    "viewType": "XML",
+    "viewPath": "apm.orders.view",
+    "controlId": "ordersFcl",
+    "async": true
+  },
+  "routes": [
+    { "name": "OrderList", "pattern": "", "target": ["OrderList"] },
+    { "name": "NewOrder", "pattern": "orders/new", "target": ["OrderList", "NewOrder"] },
+    { "name": "OrderDetail", "pattern": "orders/{ID}", "target": ["OrderList", "OrderDetail"] }
+  ],
+  "targets": {
+    "OrderList": { "viewName": "OrderList", "controlAggregation": "beginColumnPages" },
+    "NewOrder": { "viewName": "NewOrder", "controlAggregation": "midColumnPages" },
+    "OrderDetail": { "viewName": "OrderDetail", "controlAggregation": "midColumnPages" }
+  }
+
     },
     "rootView": {
       "viewName": "apm.orders.view.App",
