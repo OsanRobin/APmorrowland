@@ -1,27 +1,12 @@
-<mvc:View
-  xmlns:mvc="sap.ui.core.mvc"
-  xmlns="sap.m"
-  controllerName="apm.orders.controller.App">
-
-  <Page title="Orders - Debug">
-    <content>
-      <VBox class="sapUiSmallMargin">
-        <Title text="✅ App loaded" level="H2" />
-        <Text text="Als je dit ziet, werken index.html + Component + View." />
-
-        <Button text="Test: laad Orders via fetch" press="onLoadOrders" class="sapUiSmallMarginTop" />
-
-        <List headerText="Orders (fetch)" items="{vm>/orders}">
-          <StandardListItem title="{vm>ID}" description="{vm>type} • {vm>status}" info="{vm>total}" />
-        </List>
-
-        <MessageStrip
-          text="{vm>/error}"
-          type="Error"
-          visible="{= !!${vm>/error} }"
-          class="sapUiSmallMarginTop" />
-      </VBox>
-    </content>
-  </Page>
-
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+  <App>
+    <pages>
+      <Page title="Orders - Debug">
+        <content>
+          <Text text="ONTENT LOADED (App root)" />
+          <Text text="Als je dit ziet, is rendering 100% ok." />
+        </content>
+      </Page>
+    </pages>
+  </App>
 </mvc:View>
