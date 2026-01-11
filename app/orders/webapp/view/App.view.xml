@@ -5,7 +5,6 @@
 
   <App>
     <pages>
-      <!-- Root container page, maar zonder header -->
       <Page showHeader="false">
         <content>
           <f:FlexibleColumnLayout id="ordersFcl" layout="OneColumn" />

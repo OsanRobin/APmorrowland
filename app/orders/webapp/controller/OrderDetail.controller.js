@@ -14,7 +14,9 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
 
       this.getView().bindElement({
         path: "/Orders('" + sID + "')",
-        parameters: { $expand: "customer" }
+        parameters: {
+          $expand: "customer,items"
+        }
       });
     },
 

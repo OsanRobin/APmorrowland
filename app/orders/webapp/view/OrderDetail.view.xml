@@ -4,24 +4,71 @@
   xmlns:form="sap.ui.layout.form"
   controllerName="apm.orders.controller.OrderDetail">
 
-  <Page title="Order detail" showNavButton="true" navButtonPress="onBack">
+  <Page
+    title="Order detail"
+    showNavButton="true"
+    navButtonPress="onBack">
+
     <content>
-      <form:SimpleForm editable="false" layout="ResponsiveGridLayout">
-        <Label text="Klant" />
-        <Text text="{customer/name}" />
 
-        <Label text="Orderdatum" />
-        <Text text="{orderDate}" />
+      <!-- BOVENAAN: klant + type + status -->
+      <ObjectHeader
+        title="{= ${customer/name} || 'Onbekende klant' }"
+        number="{total}"
+        numberUnit="EUR">
 
-        <Label text="Type" />
-        <Text text="{type}" />
+        <attributes>
+          <ObjectAttribute title="Ordertype" text="{type}" />
+          <ObjectAttribute title="Orderdatum" text="{orderDate}" />
+        </attributes>
 
-        <Label text="Status" />
-        <Text text="{status}" />
+        <statuses>
+          <ObjectStatus
+            text="{status}"
+            state="{= ${status} === 'PAID' ? 'Success' : (${status} === 'CANCELLED' ? 'Error' : 'Warning') }" />
+        </statuses>
+      </ObjectHeader>
 
-        <Label text="Totaal" />
-        <Text text="{total}" />
-      </form:SimpleForm>
+      <!-- ITEMS -->
+      <Table
+        inset="false"
+        headerText="Items"
+        items="{ path: 'items' }">
+
+        <columns>
+          <Column width="40%">
+            <Text text="Naam" />
+          </Column>
+          <Column hAlign="End" width="15%">
+            <Text text="Aantal" />
+          </Column>
+          <Column hAlign="End" width="20%">
+            <Text text="Prijs" />
+          </Column>
+          <Column hAlign="End" width="25%">
+            <Text text="Subtotaal" />
+          </Column>
+        </columns>
+
+        <items>
+          <ColumnListItem>
+            <cells>
+              <Text text="{name}" />
+              <Text text="{qty}" />
+              <ObjectNumber number="{unitPrice}" unit="EUR" />
+              <ObjectNumber number="{lineTotal}" unit="EUR" />
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+
+      <!-- ONDERAAN: totaal -->
+      <Toolbar>
+        <ToolbarSpacer />
+        <Title text="Totaal:" level="H4" />
+        <ObjectNumber number="{total}" unit="EUR" class="sapUiTinyMarginBegin" />
+      </Toolbar>
+
     </content>
   </Page>
 </mvc:View>

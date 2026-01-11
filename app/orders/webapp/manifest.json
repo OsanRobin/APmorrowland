@@ -41,6 +41,8 @@
         "viewType": "XML",
         "viewPath": "apm.orders.view",
         "controlId": "ordersFcl",
+        "controlAggregation": "beginColumnPages",
+        "transition": "slide",
         "async": true
       },
       "routes": [
@@ -48,8 +50,17 @@
         { "name": "OrderDetail", "pattern": "orders/{ID}", "target": ["OrderList", "OrderDetail"] }
       ],
       "targets": {
-        "OrderList": { "viewName": "OrderList", "controlAggregation": "beginColumnPages" },
-        "OrderDetail": { "viewName": "OrderDetail", "controlAggregation": "midColumnPages" }
+        "OrderList": {
+          "viewName": "OrderList",
+          "controlAggregation": "beginColumnPages"
+        },
+        "OrderDetail": {
+          "viewName": "OrderDetail",
+          "controlAggregation": "midColumnPages"
+        }
+      },
+      "bypassed": {
+        "target": "OrderList"
       }
     },
     "rootView": {

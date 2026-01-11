@@ -18,6 +18,23 @@ sap.ui.define([
       this._sSearch = (oEvent.getParameter("newValue") || "").trim();
       this._applyAll();
     },
+onPressOrder(oEvent) {
+  const oItem = oEvent.getSource();
+  const oCtx = oItem.getBindingContext();
+  if (!oCtx) return;
+
+  const sID = oCtx.getProperty("ID");
+
+
+  const oFCL = this.getOwnerComponent().getRootControl().byId("ordersFcl");
+  if (oFCL) {
+    oFCL.setLayout("TwoColumnsMidExpanded");
+  }
+
+  this.getOwnerComponent().getRouter().navTo("OrderDetail", { ID: sID });
+}
+,
+
 
     onFilterStatus(oEvent) {
       this._sStatus = oEvent.getSource().getSelectedKey();

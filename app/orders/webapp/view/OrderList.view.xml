@@ -34,21 +34,35 @@
         <Button text="Nieuwe Order" type="Emphasized" press="onCreateOrder" />
       </Toolbar>
 
-      <List
-        id="ordersList"
-        mode="SingleSelectMaster"
-        items="{
-          path: '/Orders',
-          parameters: { $expand: 'customer' }
-        }"
-        selectionChange="onSelectOrder">
+    <List
+  id="ordersList"
+  items="{
+    path: '/Orders',
+    parameters: { $expand: 'customer' }
+  }">
 
-        <StandardListItem
-          title="{= ${customer/name} || 'Onbekende klant' }"
-          description="{= ${orderDate} + ' • ' + ${type} + ' • ' + ${status} }"
-          info="{total}" />
+  <ObjectListItem
+    title="{= ${customer/name} || 'Onbekende klant' }"
+    number="{total}"
+    numberUnit="EUR"
+    intro="{orderDate}"
+    type="Active"
+    press="onPressOrder">
 
-      </List>
+    <attributes>
+      <ObjectAttribute text="{= 'Type: ' + ${type} }" />
+    </attributes>
+
+    <firstStatus>
+      <ObjectStatus
+        text="{status}"
+        state="{= ${status} === 'PAID' ? 'Success' : (${status} === 'CANCELLED' ? 'Error' : 'Warning') }" />
+    </firstStatus>
+
+  </ObjectListItem>
+
+</List>
+
 
     </content>
   </Page>
