@@ -1,5 +1,5 @@
 using apm from '../db/schema';
-
+@path: 'festival'
 service FestivalService {
   entity Artists as projection on apm.Artists;
   entity Reviews as projection on apm.Reviews;

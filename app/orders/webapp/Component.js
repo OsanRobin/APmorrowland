@@ -1,26 +1,12 @@
-sap.ui.define([
-    "sap/ui/core/UIComponent",
-    "apm/orders/model/models"
-], (UIComponent, models) => {
-    "use strict";
+sap.ui.define(["sap/ui/core/UIComponent"], function (UIComponent) {
+  "use strict";
 
-    return UIComponent.extend("apm.orders.Component", {
-        metadata: {
-            manifest: "json",
-            interfaces: [
-                "sap.ui.core.IAsyncContentCreation"
-            ]
-        },
+  return UIComponent.extend("apm.orders.Component", {
+    metadata: { manifest: "json" },
 
-        init() {
-            // call the base component's init function
-            UIComponent.prototype.init.apply(this, arguments);
-
-            // set the device model
-            this.setModel(models.createDeviceModel(), "device");
-
-            // enable routing
-            this.getRouter().initialize();
-        }
-    });
+    init: function () {
+      UIComponent.prototype.init.apply(this, arguments);
+      // geen router nodig voor deze minimale app
+    }
+  });
 });

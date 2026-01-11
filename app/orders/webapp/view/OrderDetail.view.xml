@@ -7,7 +7,7 @@
   <Page title="Order detail" showNavButton="true" navButtonPress="onBack">
     <content>
 
-      <form:SimpleForm editable="true">
+      <form:SimpleForm editable="false" layout="ResponsiveGridLayout">
         <Label text="Klant" />
         <Text text="{customer/name}" />
 
@@ -31,7 +31,6 @@
           <Column><Text text="Unitprijs" /></Column>
           <Column><Text text="Totaal" /></Column>
         </columns>
-
         <items>
           <ColumnListItem>
             <cells>

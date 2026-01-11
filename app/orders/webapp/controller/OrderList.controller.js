@@ -7,18 +7,9 @@ sap.ui.define([
   "use strict";
 
   return Controller.extend("apm.orders.controller.OrderList", {
-
     onInit() {
       this._aFilters = [];
       this._bSortDesc = true;
-    },
-
-    onAfterRendering() {
-      const oList = this.byId("ordersList");
-      const oBinding = oList.getBinding("items");
-      if (oBinding) {
-        oBinding.changeParameters({ $expand: "customer" });
-      }
     },
 
     onSearch(oEvent) {
@@ -26,9 +17,7 @@ sap.ui.define([
       const aFilters = [];
 
       if (sQuery) {
-        aFilters.push(
-          new Filter("customer/name", FilterOperator.Contains, sQuery)
-        );
+        aFilters.push(new Filter("customer/name", FilterOperator.Contains, sQuery));
       }
 
       this._applyFilters(aFilters);
@@ -37,22 +26,14 @@ sap.ui.define([
     onFilterStatus(oEvent) {
       const sKey = oEvent.getSource().getSelectedKey();
       const a = [];
-
-      if (sKey) {
-        a.push(new Filter("status", FilterOperator.EQ, sKey));
-      }
-
+      if (sKey) a.push(new Filter("status", FilterOperator.EQ, sKey));
       this._applyFilters(a, true);
     },
 
     onFilterType(oEvent) {
       const sKey = oEvent.getSource().getSelectedKey();
       const a = [];
-
-      if (sKey) {
-        a.push(new Filter("type", FilterOperator.EQ, sKey));
-      }
-
+      if (sKey) a.push(new Filter("type", FilterOperator.EQ, sKey));
       this._applyFilters(a, true);
     },
 
@@ -60,25 +41,33 @@ sap.ui.define([
       if (!bMerge) {
         this._aFilters = aNew;
       } else {
+        // behoud enkel de search filter op customer/name en voeg de nieuwe filter(s) toe
         this._aFilters = this._aFilters
           .filter(f => f.sPath === "customer/name")
           .concat(aNew);
       }
 
-      this.byId("ordersList")
-        .getBinding("items")
-        .filter(this._aFilters);
+      const oList = this.byId("ordersList");
+      const oBinding = oList && oList.getBinding("items");
+      if (oBinding) {
+        oBinding.filter(this._aFilters);
+      }
     },
 
     onSortByDate() {
       this._bSortDesc = !this._bSortDesc;
-      this.byId("ordersList")
-        .getBinding("items")
-        .sort(new Sorter("orderDate", this._bSortDesc));
+      const oList = this.byId("ordersList");
+      const oBinding = oList && oList.getBinding("items");
+      if (oBinding) {
+        oBinding.sort(new Sorter("orderDate", this._bSortDesc));
+      }
     },
 
     onSelectOrder(oEvent) {
-      const oCtx = oEvent.getParameter("listItem").getBindingContext();
+      const oItem = oEvent.getParameter("listItem");
+      const oCtx = oItem && oItem.getBindingContext();
+      if (!oCtx) return;
+
       const sID = oCtx.getProperty("ID");
 
       this.getOwnerComponent()
@@ -88,7 +77,8 @@ sap.ui.define([
 
     onCreateOrder() {
       const oList = this.byId("ordersList");
-      const oBinding = oList.getBinding("items");
+      const oBinding = oList && oList.getBinding("items");
+      if (!oBinding) return;
 
       const oCtx = oBinding.create({
         orderDate: new Date(),
@@ -105,6 +95,5 @@ sap.ui.define([
           });
       });
     }
-
   });
 });

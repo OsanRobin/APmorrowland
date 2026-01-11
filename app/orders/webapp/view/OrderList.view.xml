@@ -8,11 +8,7 @@
     <content>
 
       <Toolbar>
-        <SearchField
-          width="20rem"
-          placeholder="Zoek op klant"
-          search="onSearch" />
-
+        <SearchField width="20rem" placeholder="Zoek op klant" search="onSearch" />
         <ToolbarSpacer />
 
         <Select width="10rem" change="onFilterStatus">
@@ -34,21 +30,22 @@
         </Select>
 
         <Button icon="sap-icon://sort" press="onSortByDate" />
-
         <Button text="Nieuwe order" type="Emphasized" press="onCreateOrder" />
       </Toolbar>
 
       <List
         id="ordersList"
         mode="SingleSelectMaster"
-        items="{ path: '/Orders' }"
+        items="{
+          path: '/Orders',
+          parameters: { $expand: 'customer' }
+        }"
         selectionChange="onSelectOrder">
 
         <StandardListItem
-          title="{customer/name}"
+          title="{= ${customer/name} || ${customer_ID} }"
           description="{type} • {status}"
           info="{total}" />
-
       </List>
 
     </content>
