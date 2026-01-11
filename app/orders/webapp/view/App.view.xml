@@ -1,11 +1,17 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f">
+<mvc:View
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:f="sap.f">
+
   <App>
     <pages>
-      <Page title="Orders">
+      <!-- Root container page, maar zonder header -->
+      <Page showHeader="false">
         <content>
           <f:FlexibleColumnLayout id="ordersFcl" layout="OneColumn" />
         </content>
       </Page>
     </pages>
   </App>
+
 </mvc:View>
