@@ -1,10 +1,9 @@
-<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.f">
   <App>
     <pages>
-      <Page title="Orders - Debug">
+      <Page title="Orders">
         <content>
-          <Text text="ONTENT LOADED (App root)" />
-          <Text text="Als je dit ziet, is rendering 100% ok." />
+          <f:FlexibleColumnLayout id="ordersFcl" layout="OneColumn" />
         </content>
       </Page>
     </pages>

@@ -8,9 +8,7 @@
       "mainService": {
         "uri": "/odata/v4/festival/",
         "type": "OData",
-        "settings": {
-          "odataVersion": "4.0"
-        }
+        "settings": { "odataVersion": "4.0" }
       }
     }
   },
@@ -20,7 +18,9 @@
       "minUI5Version": "1.143.2",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.ui.layout": {}
       }
     },
     "models": {
@@ -28,8 +28,28 @@
         "dataSource": "mainService",
         "type": "sap.ui.model.odata.v4.ODataModel",
         "settings": {
-          "synchronizationMode": "None"
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
         }
+      }
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.f.routing.Router",
+        "viewType": "XML",
+        "viewPath": "apm.orders.view",
+        "controlId": "ordersFcl",
+        "async": true
+      },
+      "routes": [
+        { "name": "OrderList", "pattern": "", "target": ["OrderList"] },
+        { "name": "OrderDetail", "pattern": "orders/{ID}", "target": ["OrderList", "OrderDetail"] }
+      ],
+      "targets": {
+        "OrderList": { "viewName": "OrderList", "controlAggregation": "beginColumnPages" },
+        "OrderDetail": { "viewName": "OrderDetail", "controlAggregation": "midColumnPages" }
       }
     },
     "rootView": {

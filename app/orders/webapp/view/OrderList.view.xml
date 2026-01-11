@@ -8,7 +8,7 @@
     <content>
 
       <Toolbar>
-        <SearchField width="20rem" placeholder="Zoek op klant" search="onSearch" />
+        <SearchField width="20rem" placeholder="Zoek op klantnaam" liveChange="onSearch" />
         <ToolbarSpacer />
 
         <Select width="10rem" change="onFilterStatus">
@@ -25,12 +25,13 @@
             <core:Item key="" text="Alle types" />
             <core:Item key="TICKETS" text="Tickets" />
             <core:Item key="MERCH" text="Merch" />
-            <core:Item key="FOOD" text="Food & Drinks" />
+           <core:Item key="FOOD" text="Food &amp; Drinks" />
+
           </items>
         </Select>
 
-        <Button icon="sap-icon://sort" press="onSortByDate" />
-        <Button text="Nieuwe order" type="Emphasized" press="onCreateOrder" />
+        <Button icon="sap-icon://sort" tooltip="Sorteer op datum" press="onSortByDate" />
+        <Button text="Nieuwe Order" type="Emphasized" press="onCreateOrder" />
       </Toolbar>
 
       <List
@@ -43,9 +44,10 @@
         selectionChange="onSelectOrder">
 
         <StandardListItem
-          title="{= ${customer/name} || ${customer_ID} }"
-          description="{type} • {status}"
+          title="{= ${customer/name} || 'Onbekende klant' }"
+          description="{= ${orderDate} + ' • ' + ${type} + ' • ' + ${status} }"
           info="{total}" />
+
       </List>
 
     </content>

@@ -3,25 +3,23 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
 
   return Controller.extend("apm.orders.controller.OrderDetail", {
     onInit() {
-      const oRouter = this.getOwnerComponent().getRouter();
-      oRouter.getRoute("RouteOrderDetail").attachPatternMatched(this._onMatched, this);
+      this.getOwnerComponent()
+        .getRouter()
+        .getRoute("OrderDetail")
+        .attachPatternMatched(this._onMatched, this);
     },
 
     _onMatched(oEvent) {
       const sID = oEvent.getParameter("arguments").ID;
-      const sPath = "/Orders('" + sID + "')";
 
-      // Expand customer + items zodat detailpagina alles heeft
       this.getView().bindElement({
-        path: sPath,
-        parameters: {
-          $expand: "customer,items"
-        }
+        path: "/Orders('" + sID + "')",
+        parameters: { $expand: "customer" }
       });
     },
 
     onBack() {
-      this.getOwnerComponent().getRouter().navTo("RouteOrderList");
+      this.getOwnerComponent().getRouter().navTo("OrderList");
     }
   });
 });

@@ -8,59 +8,51 @@ sap.ui.define([
 
   return Controller.extend("apm.orders.controller.OrderList", {
     onInit() {
-      this._aFilters = [];
+      this._sSearch = "";
+      this._sStatus = "";
+      this._sType = "";
       this._bSortDesc = true;
     },
 
     onSearch(oEvent) {
-      const sQuery = oEvent.getParameter("query");
-      const aFilters = [];
-
-      if (sQuery) {
-        aFilters.push(new Filter("customer/name", FilterOperator.Contains, sQuery));
-      }
-
-      this._applyFilters(aFilters);
+      this._sSearch = (oEvent.getParameter("newValue") || "").trim();
+      this._applyAll();
     },
 
     onFilterStatus(oEvent) {
-      const sKey = oEvent.getSource().getSelectedKey();
-      const a = [];
-      if (sKey) a.push(new Filter("status", FilterOperator.EQ, sKey));
-      this._applyFilters(a, true);
+      this._sStatus = oEvent.getSource().getSelectedKey();
+      this._applyAll();
     },
 
     onFilterType(oEvent) {
-      const sKey = oEvent.getSource().getSelectedKey();
-      const a = [];
-      if (sKey) a.push(new Filter("type", FilterOperator.EQ, sKey));
-      this._applyFilters(a, true);
+      this._sType = oEvent.getSource().getSelectedKey();
+      this._applyAll();
     },
 
-    _applyFilters(aNew, bMerge) {
-      if (!bMerge) {
-        this._aFilters = aNew;
-      } else {
-        // behoud enkel de search filter op customer/name en voeg de nieuwe filter(s) toe
-        this._aFilters = this._aFilters
-          .filter(f => f.sPath === "customer/name")
-          .concat(aNew);
+    _applyAll() {
+      const aFilters = [];
+
+      if (this._sSearch) {
+        aFilters.push(new Filter("customer/name", FilterOperator.Contains, this._sSearch));
+      }
+      if (this._sStatus) {
+        aFilters.push(new Filter("status", FilterOperator.EQ, this._sStatus));
+      }
+      if (this._sType) {
+        aFilters.push(new Filter("type", FilterOperator.EQ, this._sType));
       }
 
       const oList = this.byId("ordersList");
       const oBinding = oList && oList.getBinding("items");
       if (oBinding) {
-        oBinding.filter(this._aFilters);
+        oBinding.filter(aFilters);
       }
     },
 
     onSortByDate() {
       this._bSortDesc = !this._bSortDesc;
-      const oList = this.byId("ordersList");
-      const oBinding = oList && oList.getBinding("items");
-      if (oBinding) {
-        oBinding.sort(new Sorter("orderDate", this._bSortDesc));
-      }
+      const oBinding = this.byId("ordersList").getBinding("items");
+      oBinding.sort(new Sorter("orderDate", this._bSortDesc));
     },
 
     onSelectOrder(oEvent) {
@@ -69,16 +61,12 @@ sap.ui.define([
       if (!oCtx) return;
 
       const sID = oCtx.getProperty("ID");
-
-      this.getOwnerComponent()
-        .getRouter()
-        .navTo("RouteOrderDetail", { ID: sID });
+      this.getOwnerComponent().getRouter().navTo("OrderDetail", { ID: sID });
     },
 
     onCreateOrder() {
       const oList = this.byId("ordersList");
-      const oBinding = oList && oList.getBinding("items");
-      if (!oBinding) return;
+      const oBinding = oList.getBinding("items");
 
       const oCtx = oBinding.create({
         orderDate: new Date(),
@@ -88,11 +76,7 @@ sap.ui.define([
       });
 
       oCtx.created().then(() => {
-        this.getOwnerComponent()
-          .getRouter()
-          .navTo("RouteOrderDetail", {
-            ID: oCtx.getProperty("ID")
-          });
+        this.getOwnerComponent().getRouter().navTo("OrderDetail", { ID: oCtx.getProperty("ID") });
       });
     }
   });
