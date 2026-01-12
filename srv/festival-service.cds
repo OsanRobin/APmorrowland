@@ -19,11 +19,13 @@ entity Leaderboard as select from Artists as a
 {
   key a.ID as artistID,
       a.name as artistName,
+      a.genre as genre,
 
       cast(coalesce(avg(r.rating), 0) as Decimal(3,2)) as avgRating,
       cast(count(r.ID)               as Integer)       as reviewCount
 }
-group by a.ID, a.name;
+group by a.ID, a.name, a.genre;
+
 
 
 

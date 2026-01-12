@@ -1,37 +1,86 @@
 <mvc:View
   controllerName="apm.artist.controller.Leaderboard"
   xmlns:mvc="sap.ui.core.mvc"
-  xmlns="sap.m">
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
 
-  <Page title="Leaderboard" showNavButton="true" navButtonPress=".onBack" class="sapUiContentPadding">
+  <Page
+    title="Leaderboard"
+    showNavButton="true"
+    navButtonPress=".onBack"
+    class="sapUiContentPadding">
+
     <content>
+
+      <Toolbar>
+        <Title text="Top artists per genre" level="H4"/>
+        <ToolbarSpacer/>
+        <Select
+          id="genreSelect"
+          width="12rem"
+          change=".onGenreChange">
+          <items>
+            <core:Item key="" text="All genres"/>
+            <core:Item key="Techno" text="Techno"/>
+            <core:Item key="Pop" text="Pop"/>
+            <core:Item key="Hardstyle" text="Hardstyle"/>
+            <core:Item key="Indie" text="Indie"/>
+            <core:Item key="House" text="House"/>
+            <core:Item key="EDM" text="EDM"/>
+          </items>
+        </Select>
+      </Toolbar>
+
       <Table
+        id="lbTable"
         items="{
           path: '/Leaderboard',
-          sorter: { path: 'avgRating', descending: true }
+          sorter: [
+            { path: 'avgRating', descending: true },
+            { path: 'reviewCount', descending: true }
+          ]
         }"
         growing="true"
         growingScrollToLoad="true">
 
         <columns>
-          <Column width="4rem"><Text text="Rank"/></Column>
-          <Column><Text text="Artist"/></Column>
-          <Column hAlign="End" width="7rem"><Text text="Avg"/></Column>
-          <Column hAlign="End" width="7rem"><Text text="#Reviews"/></Column>
+          <Column width="4rem">
+            <Text text="Rank"/>
+          </Column>
+
+          <Column>
+            <Text text="Artist"/>
+          </Column>
+
+          <Column hAlign="End" width="7rem">
+            <Text text="Avg"/>
+          </Column>
+
+          <Column hAlign="End" width="7rem">
+            <Text text="#Reviews"/>
+          </Column>
         </columns>
 
         <items>
           <ColumnListItem>
             <cells>
+             
               <Text text="{= ${$index} + 1 }"/>
+
+              
               <Text text="{artistName}"/>
+
+           
               <ObjectNumber number="{avgRating}"/>
+
               <ObjectNumber number="{reviewCount}"/>
             </cells>
           </ColumnListItem>
         </items>
 
       </Table>
+
     </content>
   </Page>
+
 </mvc:View>
