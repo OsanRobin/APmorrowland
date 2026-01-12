@@ -150,6 +150,10 @@ onSaveArtist: async function () {
     MessageBox.error("Could not create artist/performance. Check service and field names.");
   }
 },
+onGoLeaderboard: function () {
+  this.getOwnerComponent().getRouter().navTo("Leaderboard");
+},
+
 
     _applyFiltersAndSort: function () {
       const oList = this.byId("artistList");

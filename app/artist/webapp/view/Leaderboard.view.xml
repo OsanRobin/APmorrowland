@@ -1,0 +1,37 @@
+<mvc:View
+  controllerName="apm.artist.controller.Leaderboard"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+
+  <Page title="Leaderboard" showNavButton="true" navButtonPress=".onBack" class="sapUiContentPadding">
+    <content>
+      <Table
+        items="{
+          path: '/Leaderboard',
+          sorter: { path: 'avgRating', descending: true }
+        }"
+        growing="true"
+        growingScrollToLoad="true">
+
+        <columns>
+          <Column width="4rem"><Text text="Rank"/></Column>
+          <Column><Text text="Artist"/></Column>
+          <Column hAlign="End" width="7rem"><Text text="Avg"/></Column>
+          <Column hAlign="End" width="7rem"><Text text="#Reviews"/></Column>
+        </columns>
+
+        <items>
+          <ColumnListItem>
+            <cells>
+              <Text text="{= ${$index} + 1 }"/>
+              <Text text="{artistName}"/>
+              <ObjectNumber number="{avgRating}"/>
+              <ObjectNumber number="{reviewCount}"/>
+            </cells>
+          </ColumnListItem>
+        </items>
+
+      </Table>
+    </content>
+  </Page>
+</mvc:View>

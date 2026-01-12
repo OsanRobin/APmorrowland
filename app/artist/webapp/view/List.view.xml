@@ -21,6 +21,13 @@
           type="Transparent"
           press="onOpenViewSettings" />
           <Button text="Add Artist" icon="sap-icon://add" type="Emphasized" press="onOpenAddArtist"/>
+          <Button
+  text="Leaderboard"
+  icon="sap-icon://ranking"
+  type="Transparent"
+  press="onGoLeaderboard" />
+
+          
 
       </Toolbar>
     </subHeader>

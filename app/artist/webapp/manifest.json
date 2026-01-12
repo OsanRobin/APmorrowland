@@ -93,12 +93,22 @@
       },
   "routes": [
   { "name": "list", "pattern": "", "target": "List" },
-  { "name": "detail", "pattern": "artist/{artistID}", "target": "Detail" }
+  { "name": "detail", "pattern": "artist/{artistID}", "target": "Detail" },{
+  "pattern": "leaderboard",
+  "name": "Leaderboard",
+  "target": "Leaderboard"
+}
+
 
 ],
 "targets": {
   "List": { "viewName": "List" },
-  "Detail": { "viewName": "Detail" }
+  "Detail": { "viewName": "Detail" },"Leaderboard": {
+  "viewName": "Leaderboard",
+  "viewId": "Leaderboard",
+  "viewLevel": 2
+}
+
 }
     
   
