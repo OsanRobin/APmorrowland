@@ -2,8 +2,9 @@ sap.ui.define([
   "sap/ui/core/mvc/Controller",
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
-  "sap/ui/model/Sorter"
-], function (Controller, Filter, FilterOperator, Sorter) {
+  "sap/ui/model/Sorter",
+  "sap/ui/core/UIComponent"
+], function (Controller, Filter, FilterOperator, Sorter, UIComponent) {
   "use strict";
 
   return Controller.extend("apm.orders.controller.OrderList", {
@@ -11,10 +12,26 @@ sap.ui.define([
     onInit() {
       this._aFilters = [];
       this._bSortDesc = true;
+
+      const oRouter = UIComponent.getRouterFor(this);
+      const oRoute = oRouter.getRoute("OrderList") || oRouter.getRoute("Orders");
+      if (oRoute) oRoute.attachPatternMatched(this._onRouteMatched, this);
+    },
+
+    _onRouteMatched() {
+      const oList = this.byId("ordersList");
+      if (!oList) return;
+
+      const oBinding = oList.getBinding("items");
+      if (!oBinding) return;
+
+      oBinding.refresh();
+      oBinding.filter(this._aFilters);
+      oBinding.sort(new Sorter("orderDate", this._bSortDesc));
     },
 
     onSearch(oEvent) {
-      const sQuery = oEvent.getParameter("query") || "";
+      const sQuery = oEvent.getParameter("query") || oEvent.getParameter("newValue") || "";
       const aFilters = [];
 
       if (sQuery.trim()) {
@@ -60,7 +77,6 @@ sap.ui.define([
       oBinding.sort(new Sorter("orderDate", this._bSortDesc));
     },
 
-
     onPressOrder(oEvent) {
       const oItem = oEvent.getSource();
       const oCtx = oItem.getBindingContext();
@@ -75,12 +91,11 @@ sap.ui.define([
     },
 
     onCreateOrder() {
-  const oFCL = this.getOwnerComponent().getRootControl().byId("ordersFcl");
-  if (oFCL) oFCL.setLayout("TwoColumnsMidExpanded");
+      const oFCL = this.getOwnerComponent().getRootControl().byId("ordersFcl");
+      if (oFCL) oFCL.setLayout("TwoColumnsMidExpanded");
 
-  this.getOwnerComponent().getRouter().navTo("NewOrder");
-}
-
+      this.getOwnerComponent().getRouter().navTo("NewOrder");
+    }
 
   });
 });

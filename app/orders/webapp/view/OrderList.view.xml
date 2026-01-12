@@ -25,44 +25,39 @@
             <core:Item key="" text="Alle types" />
             <core:Item key="TICKETS" text="Tickets" />
             <core:Item key="MERCH" text="Merch" />
-           <core:Item key="FOOD" text="Food &amp; Drinks" />
-
+            <core:Item key="FOOD" text="Food &amp; Drinks" />
           </items>
         </Select>
 
-        <Button icon="sap-icon://sort" tooltip="Sorteer op datum" press="onSortByDate" />
+        <Button icon="sap-icon://sort" press="onSortByDate" />
         <Button text="Nieuwe Order" type="Emphasized" press="onCreateOrder" />
       </Toolbar>
 
-    <List
-  id="ordersList"
-  items="{
-    path: '/Orders',
-    parameters: { $expand: 'customer' }
-  }">
+      <List
+        id="ordersList"
+        items="{ path: '/Orders', parameters: { $expand: 'customer' } }">
 
-  <ObjectListItem
-    title="{= ${customer/name} || 'Onbekende klant' }"
-    number="{total}"
-    numberUnit="EUR"
-    intro="{orderDate}"
-    type="Active"
-    press="onPressOrder">
+        <ObjectListItem
+          title="{= ${customer/name} || 'Onbekende klant' }"
+          number="{total}"
+          numberUnit="EUR"
+          intro="{orderDate}"
+          type="Active"
+          press="onPressOrder">
 
-    <attributes>
-      <ObjectAttribute text="{= 'Type: ' + ${type} }" />
-    </attributes>
+          <attributes>
+            <ObjectAttribute text="{= 'Type: ' + ${type} }" />
+          </attributes>
 
-    <firstStatus>
-      <ObjectStatus
-        text="{status}"
-        state="{= ${status} === 'PAID' ? 'Success' : (${status} === 'CANCELLED' ? 'Error' : 'Warning') }" />
-    </firstStatus>
+          <firstStatus>
+            <ObjectStatus
+              text="{status}"
+              state="{= ${status} === 'PAID' ? 'Success' : (${status} === 'CANCELLED' ? 'Error' : 'Warning') }" />
+          </firstStatus>
 
-  </ObjectListItem>
+        </ObjectListItem>
 
-</List>
-
+      </List>
 
     </content>
   </Page>

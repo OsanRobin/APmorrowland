@@ -9,7 +9,6 @@
 
       <Wizard id="wiz">
 
-       
         <WizardStep id="step1" title="Stap 1: Kies klant" validated="{vm>/step1Valid}">
           <VBox class="sapUiSmallMarginTop" width="100%">
             <Title text="Klant" level="H4"/>
@@ -31,7 +30,6 @@
           </VBox>
         </WizardStep>
 
-      
         <WizardStep id="step2" title="Stap 2: Kies ordertype" validated="{vm>/step2Valid}">
           <VBox class="sapUiSmallMarginTop" width="100%">
             <Label text="Ordertype" />
@@ -43,7 +41,6 @@
           </VBox>
         </WizardStep>
 
-      
         <WizardStep id="step3" title="Stap 3: Items toevoegen" validated="{vm>/step3Valid}">
           <VBox class="sapUiSmallMarginTop" width="100%">
 
@@ -76,20 +73,8 @@
                   <cells>
                     <Text text="{vm>name}"/>
                     <Text text="{vm>qty}"/>
-                    <ObjectNumber
-                      number="{
-                        path:'vm>unitPrice',
-                        type:'sap.ui.model.type.Float',
-                        formatOptions:{ minFractionDigits:2, maxFractionDigits:2 }
-                      }"
-                      unit="EUR"/>
-                    <ObjectNumber
-                      number="{
-                        path:'vm>lineTotal',
-                        type:'sap.ui.model.type.Float',
-                        formatOptions:{ minFractionDigits:2, maxFractionDigits:2 }
-                      }"
-                      unit="EUR"/>
+                    <ObjectNumber number="{vm>unitPrice}" unit="EUR"/>
+                    <ObjectNumber number="{vm>lineTotal}" unit="EUR"/>
                     <Button icon="sap-icon://delete" type="Transparent" press="onRemoveItem"/>
                   </cells>
                 </ColumnListItem>
@@ -101,14 +86,11 @@
               text="Je moet minstens één item toevoegen."
               type="Error"
               showIcon="true"/>
-
           </VBox>
         </WizardStep>
 
-      
         <WizardStep id="step4" title="Stap 4: Samenvatting" validated="true">
           <VBox class="sapUiSmallMarginTop" width="100%">
-            <Title text="Samenvatting" level="H4"/>
 
             <ObjectStatus title="Klant" text="{vm>/customerName}" />
             <ObjectStatus title="Ordertype" text="{vm>/type}" />
@@ -125,20 +107,8 @@
                   <cells>
                     <Text text="{vm>name}"/>
                     <Text text="{vm>qty}"/>
-                    <ObjectNumber
-                      number="{
-                        path:'vm>unitPrice',
-                        type:'sap.ui.model.type.Float',
-                        formatOptions:{ minFractionDigits:2, maxFractionDigits:2 }
-                      }"
-                      unit="EUR"/>
-                    <ObjectNumber
-                      number="{
-                        path:'vm>lineTotal',
-                        type:'sap.ui.model.type.Float',
-                        formatOptions:{ minFractionDigits:2, maxFractionDigits:2 }
-                      }"
-                      unit="EUR"/>
+                    <ObjectNumber number="{vm>unitPrice}" unit="EUR"/>
+                    <ObjectNumber number="{vm>lineTotal}" unit="EUR"/>
                   </cells>
                 </ColumnListItem>
               </items>
@@ -147,19 +117,14 @@
             <Toolbar class="sapUiSmallMarginTop">
               <ToolbarSpacer/>
               <Title text="Totaal:" level="H4"/>
-              <ObjectNumber
-                number="{
-                  path:'vm>/total',
-                  type:'sap.ui.model.type.Float',
-                  formatOptions:{ minFractionDigits:2, maxFractionDigits:2 }
-                }"
-                unit="EUR"/>
+              <ObjectNumber number="{vm>/total}" unit="EUR"/>
             </Toolbar>
 
             <Toolbar class="sapUiSmallMarginTop">
               <ToolbarSpacer/>
               <Button text="Bevestigen &amp; aanmaken" type="Emphasized" press="onSubmit"/>
             </Toolbar>
+
           </VBox>
         </WizardStep>
 
