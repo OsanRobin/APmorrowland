@@ -18,11 +18,11 @@
           <HBox class="sapUiSmallMarginTop" alignItems="Center" width="100%">
             <Text text="Festivaldag:" width="7rem"/>
             <Select
-              width="16rem"
+              width="18rem"
               items="{vm>/days}"
               selectedKey="{vm>/selectedDayId}"
               change=".onDayChange">
-              <core:Item key="{vm>id}" text="{vm>label}" />
+              <core:Item key="{vm>ID}" text="{vm>label}" />
             </Select>
           </HBox>
 
@@ -33,13 +33,16 @@
               <VBox class="sapUiSmallMargin" width="100%">
                 <Title text="{vm>name}" level="H3"/>
 
-                <List items="{path:'vm>performances', templateShareable:false}">
+                <List
+                  items="{path:'vm>performances', templateShareable:false}"
+                  noDataText="Geen optredens op deze stage">
                   <StandardListItem
-                    title="{vm>artist}"
+                    title="{vm>artistName}"
                     description="{vm>start} - {vm>end}  |  {vm>genre}"
                     type="Active"
                     press=".onPerformancePress"/>
                 </List>
+
               </VBox>
             </CustomListItem>
           </List>

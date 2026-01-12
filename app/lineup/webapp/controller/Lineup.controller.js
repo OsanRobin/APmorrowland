@@ -1,88 +1,155 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
   "sap/ui/model/json/JSONModel",
+  "sap/ui/model/odata/v4/ODataModel",
+  "sap/ui/model/Filter",
+  "sap/ui/model/FilterOperator",
   "sap/m/MessageBox",
   "sap/m/MessageToast"
-], function (Controller, JSONModel, MessageBox, MessageToast) {
+], function (Controller, JSONModel, ODataModel, Filter, FilterOperator, MessageBox, MessageToast) {
   "use strict";
 
   return Controller.extend("apm.lineup.controller.Lineup", {
 
     onInit: function () {
-      this._setDummyData();
-      this._applySelectedDay();
+      const oVM = new JSONModel({
+        days: [],
+        selectedDayId: "",
+        stages: []
+      });
+      this.getView().setModel(oVM, "vm");
+
+      const oOData = new ODataModel({
+        serviceUrl: "/odata/v4/festival/",
+        synchronizationMode: "None",
+        operationMode: "Server",
+        autoExpandSelect: true,
+        earlyRequests: true
+      });
+      this.getView().setModel(oOData);
+
+      this._loadInitial().catch(e => MessageBox.error(e?.message || String(e)));
     },
 
     onRefresh: function () {
-    
-      MessageToast.show("Refreshed ");
-      this._applySelectedDay();
+      this._loadInitial(true)
+        .then(() => MessageToast.show("Refreshed "))
+        .catch(e => MessageBox.error(e?.message || String(e)));
     },
 
     onDayChange: function () {
-      this._applySelectedDay();
+      this._loadStagesAndPerformances(true)
+        .catch(e => MessageBox.error(e?.message || String(e)));
     },
 
     onPerformancePress: function (oEvent) {
       const oPerf = oEvent.getSource().getBindingContext("vm").getObject();
       MessageBox.information(
-        `${oPerf.artist}\nGenre: ${oPerf.genre}\nTijd: ${oPerf.start} - ${oPerf.end}`
+        `${oPerf.artistName}\nGenre: ${oPerf.genre}\nStage: ${oPerf.stageName}\nTijd: ${oPerf.start} - ${oPerf.end}`
       );
     },
 
-    _setDummyData: function () {
-      const oVM = new JSONModel({
-        days: [
-          { id: "fri", label: "Vrijdag" },
-          { id: "sat", label: "Zaterdag" }
-        ],
-        selectedDayId: "fri",
+    _loadInitial: async function () {
+      await this._loadDays();
 
-        stagesByDay: {
-          fri: [
-            {
-              name: "Mainstage",
-              performances: [
-                { artist: "Aurora Nova", genre: "Pop", start: "18:00", end: "19:00" },
-                { artist: "The Paper Planes", genre: "Indie", start: "19:15", end: "20:15" }
-              ]
-            },
-            {
-              name: "Techno Dome",
-              performances: [
-                { artist: "DJ Nightshift", genre: "Techno", start: "18:30", end: "20:00" },
-                { artist: "Bassline Riot", genre: "D&amp;B", start: "20:00", end: "21:00" }
-              ]
-            }
-          ],
-          sat: [
-            {
-              name: "Mainstage",
-              performances: [
-                { artist: "Sunset Strings", genre: "Indie", start: "17:30", end: "18:30" },
-                { artist: "Aurora Nova", genre: "Pop", start: "20:30", end: "21:30" }
-              ]
-            },
-            {
-              name: "Techno Dome",
-              performances: [
-                { artist: "Kinetic K", genre: "Techno", start: "19:00", end: "20:30" }
-              ]
-            }
-          ]
-        },
+      const oVM = this.getView().getModel("vm");
+      if (!oVM.getProperty("/selectedDayId")) {
+        const aDays = oVM.getProperty("/days");
+        if (aDays.length) {
+          oVM.setProperty("/selectedDayId", aDays[0].ID);
+        }
+      }
 
-        stages: []
-      });
-
-      this.getView().setModel(oVM, "vm");
+      await this._loadStagesAndPerformances();
     },
 
-    _applySelectedDay: function () {
+    _loadDays: async function () {
       const oVM = this.getView().getModel("vm");
-      const sDay = oVM.getProperty("/selectedDayId");
-      const aStages = oVM.getProperty("/stagesByDay/" + sDay) || [];
-      oVM.setProperty("/stages", aStages);
+      const oModel = this.getView().getModel();
+
+      const aDays = await this._readAll(oModel, "/FestivalDays", {
+        $select: "ID,label,date",
+        $orderby: "date asc"
+      });
+
+      oVM.setProperty("/days", aDays);
+    },
+
+    _loadStagesAndPerformances: async function () {
+      const oVM = this.getView().getModel("vm");
+      const oModel = this.getView().getModel();
+      const sDayIdRaw = oVM.getProperty("/selectedDayId");
+      const sDayId = this._stripQuotes(sDayIdRaw);
+
+     
+      const aStages = await this._readAll(oModel, "/Stages", {
+        $select: "ID,name",
+        $orderby: "name asc"
+      });
+
+      
+      let aPerf = [];
+      if (sDayId) {
+        const oList = oModel.bindList("/Performances", null, null, null, {
+          $expand: "artist($select=name,genre),stage($select=ID,name)"
+        });
+
+        oList.filter([
+          new Filter("day_ID", FilterOperator.EQ, sDayId)
+        ]);
+
+        const aCtx = await oList.requestContexts(0, 2000);
+        aPerf = aCtx.map(c => c.getObject());
+      }
+
+    
+      const mStage = new Map();
+      aStages.forEach(s => {
+        mStage.set(s.ID, { ID: s.ID, name: s.name, performances: [] });
+      });
+
+      aPerf.forEach(p => {
+        const sStage = p.stage?.ID;
+        const oRow = mStage.get(sStage);
+        if (!oRow) return;
+
+        oRow.performances.push({
+          artistName: p.artist?.name || "Unknown",
+          genre: p.artist?.genre || "",
+          start: this._fmtTime(p.startTime),
+          end: this._fmtTime(p.endTime),
+          stageName: p.stage?.name || ""
+        });
+      });
+
+      const aRows = Array.from(mStage.values()).map(r => {
+        r.performances.sort((a, b) => (a.start > b.start ? 1 : -1));
+        return r;
+      });
+
+      oVM.setProperty("/stages", aRows);
+    },
+
+  
+    _readAll: async function (oModel, sPath, mParams) {
+      const oList = oModel.bindList(sPath, null, null, null, mParams || {});
+      const aCtx = await oList.requestContexts(0, 2000);
+      return aCtx.map(c => c.getObject());
+    },
+
+    _fmtTime: function (vTime) {
+      if (!vTime) return "";
+      const s = String(vTime);
+      const parts = s.split(":");
+      return `${parts[0] || "00"}:${parts[1] || "00"}`;
+    },
+
+    _stripQuotes: function (v) {
+      const s = String(v || "").trim();
+      
+      const s1 = s.replace(/^guid'/i, "").replace(/'$/i, "");
+      
+      return s1.replace(/^'+/, "").replace(/'+$/, "").replace(/^"+/, "").replace(/"+$/, "");
     }
 
   });
