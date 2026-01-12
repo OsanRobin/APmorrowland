@@ -1,35 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>lineup</title>
-    <style>
-        html, body, body > div, #container, #container-uiarea {
-            height: 100%;
-        }
-    </style>
-    <script
-        id="sap-ui-bootstrap"
-        src="https://sapui5.hana.ondemand.com/1.143.2/resources/sap-ui-core.js"
-        data-sap-ui-theme="sap_horizon"
-        data-sap-ui-resource-roots='{
-            "apm.lineup": "./"
-        }'
-        data-sap-ui-on-init="module:sap/ui/core/ComponentSupport"
-        data-sap-ui-compat-version="edge"
-        data-sap-ui-async="true"
-        data-sap-ui-frame-options="trusted"
-    ></script>
+  <meta charset="utf-8" />
+  <title>Line-up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script
+    id="sap-ui-bootstrap"
+    src="https://ui5.sap.com/resources/sap-ui-core.js"
+    data-sap-ui-theme="sap_horizon"
+    data-sap-ui-libs="sap.m,sap.ui.core"
+    data-sap-ui-async="true"
+    data-sap-ui-compatVersion="edge"
+    data-sap-ui-resourceroots='{
+      "apm.lineup": "."
+    }'>
+  </script>
+
+  <script>
+    sap.ui.getCore().attachInit(function () {
+      sap.ui.require(["sap/ui/core/mvc/XMLView"], function (XMLView) {
+        XMLView.create({ viewName: "apm.lineup.view.Lineup" }).then(function (oView) {
+          oView.placeAt("content");
+        });
+      });
+    });
+  </script>
 </head>
-<body class="sapUiBody sapUiSizeCompact" id="content">
-    <div
-        data-sap-ui-component
-        data-name="apm.lineup"
-        data-id="container"
-        data-settings='{"id" : "apm.lineup"}'
-        data-handle-validation="true"
-    ></div>
-</body>
+
+<body class="sapUiBody" id="content"></body>
 </html>

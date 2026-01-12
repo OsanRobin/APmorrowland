@@ -1,26 +1,27 @@
 sap.ui.define([
-    "sap/ui/core/UIComponent",
-    "apm/lineup/model/models"
-], (UIComponent, models) => {
-    "use strict";
+  "sap/ui/core/UIComponent",
+  "sap/ui/model/odata/v4/ODataModel"
+], function (UIComponent, ODataModel) {
+  "use strict";
 
-    return UIComponent.extend("apm.lineup.Component", {
-        metadata: {
-            manifest: "json",
-            interfaces: [
-                "sap.ui.core.IAsyncContentCreation"
-            ]
-        },
+  return UIComponent.extend("apm.lineup.Component", {
+    metadata: {
+      manifest: "json"
+    },
 
-        init() {
-            // call the base component's init function
-            UIComponent.prototype.init.apply(this, arguments);
+    init: function () {
+      UIComponent.prototype.init.apply(this, arguments);
 
-            // set the device model
-            this.setModel(models.createDeviceModel(), "device");
+      // Force default OData V4 model (werkt altijd)
+      const oModel = new ODataModel({
+        serviceUrl: "/odata/v4/festival/",
+        synchronizationMode: "None",
+        operationMode: "Server",
+        autoExpandSelect: true,
+        earlyRequests: true
+      });
 
-            // enable routing
-            this.getRouter().initialize();
-        }
-    });
+      this.setModel(oModel); // default model voor view/controller
+    }
+  });
 });

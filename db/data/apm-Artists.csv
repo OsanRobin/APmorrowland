@@ -1,8 +1,7 @@
-ID,name,genre,country,popularityScore,bio,spotifyUrl,instagramUrl
-3fa85f64-5717-4562-b3fc-2c963f66afa6,Nova Pulse,Techno,BE,88,"High-energy techno act known for hypnotic festival sets.","https://open.spotify.com/artist/0","https://instagram.com/novapulse"
-2c1a7d5e-2f12-4c7a-9f2c-6c8c3bb0a1b1,Crystal Bloom,Pop,SE,74,"Scandinavian pop artist with dreamy vocals.","https://open.spotify.com/artist/1","https://instagram.com/crystalbloom"
-b7d3f2c1-8e6a-4f27-b0c4-6a6c9f5b9f2a,Skyline DJs,House,NL,76,"House duo bringing uplifting vibes and melodic grooves.","https://open.spotify.com/artist/2","https://instagram.com/skylinedjs"
-5a6b7c8d-1111-4a2b-9c3d-222233334444,Neon Riot,EDM,DE,92,"Big-room EDM act famous for explosive drops and visuals.","https://open.spotify.com/artist/3","https://instagram.com/neonriot"
-9d1c2a3b-4444-4f55-8a66-777788889999,Luna & Co,Pop,US,69,"Pop act blending catchy hooks with electronic elements.","https://open.spotify.com/artist/4","https://instagram.com/lunaandco"
-1f2e3d4c-aaaa-4bbb-8ccc-ddddeeeeffff,Bass Alchemist,Hardstyle,BE,84,"Hardstyle producer with relentless kicks and dark energy.","https://open.spotify.com/artist/5","https://instagram.com/bassalchemist"
-6e5d4c3b-1234-4a5b-9c6d-abcdefabcdef,Echo Valley,Indie,UK,72,"Indie band known for atmospheric soundscapes.","https://open.spotify.com/artist/6","https://instagram.com/echovalley"
+ID;name;genre;country;popularityScore;bio;spotifyUrl;instagramUrl
+c1111111-1111-1111-1111-111111111111;Aurora Nova;Pop;BE;82;High-energy pop act.;https://open.spotify.com/;https://instagram.com/
+c2222222-2222-2222-2222-222222222222;DJ Nightshift;Techno;NL;91;Peak-time techno set.;https://open.spotify.com/;https://instagram.com/
+c3333333-3333-3333-3333-333333333333;The Paper Planes;Indie;UK;74;Indie band with mellow vibes.;https://open.spotify.com/;https://instagram.com/
+c4444444-4444-4444-4444-444444444444;Bassline Riot;Drum & Bass;DE;86;Fast DnB pressure.;https://open.spotify.com/;https://instagram.com/
+c5555555-5555-5555-5555-555555555555;Sunset Strings;Indie;BE;68;Acoustic & warm songs.;https://open.spotify.com/;https://instagram.com/
+c6666666-6666-6666-6666-666666666666;Kinetic K;Techno;FR;79;Groovy warehouse techno.;https://open.spotify.com/;https://instagram.com/

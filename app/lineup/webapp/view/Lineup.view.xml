@@ -1,0 +1,52 @@
+<mvc:View
+  controllerName="apm.lineup.controller.Lineup"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:core="sap.ui.core">
+
+  <App>
+    <Page title="Line-up &amp; Planning">
+      <content>
+        <VBox class="sapUiSmallMargin" width="100%">
+
+          <Toolbar>
+            <Title text="Dagoverzicht"/>
+            <ToolbarSpacer/>
+            <Button text="Refresh" press=".onRefresh"/>
+          </Toolbar>
+
+          <HBox class="sapUiSmallMarginTop" alignItems="Center" width="100%">
+            <Text text="Festivaldag:" width="7rem"/>
+            <Select
+              width="16rem"
+              items="{vm>/days}"
+              selectedKey="{vm>/selectedDayId}"
+              change=".onDayChange">
+              <core:Item key="{vm>id}" text="{vm>label}" />
+            </Select>
+          </HBox>
+
+          <Text text="Stages" class="sapUiSmallMarginTop"/>
+
+          <List items="{path:'vm>/stages', templateShareable:false}">
+            <CustomListItem>
+              <VBox class="sapUiSmallMargin" width="100%">
+                <Title text="{vm>name}" level="H3"/>
+
+                <List items="{path:'vm>performances', templateShareable:false}">
+                  <StandardListItem
+                    title="{vm>artist}"
+                    description="{vm>start} - {vm>end}  |  {vm>genre}"
+                    type="Active"
+                    press=".onPerformancePress"/>
+                </List>
+              </VBox>
+            </CustomListItem>
+          </List>
+
+        </VBox>
+      </content>
+    </Page>
+  </App>
+
+</mvc:View>
