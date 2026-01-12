@@ -1,30 +1,173 @@
 sap.ui.define([
   "sap/ui/core/mvc/Controller",
   "sap/ui/model/json/JSONModel",
-  "sap/m/MessageToast",
-  "sap/m/MessageBox"
-], function (Controller, JSONModel, MessageToast, MessageBox) {
+  "sap/m/MessageBox",
+  "sap/m/MessageToast"
+], function (Controller, JSONModel, MessageBox, MessageToast) {
   "use strict";
 
-  function toNumber(v) {
+  const toNumber = (v) => {
     const n = Number(String(v ?? "").replace(",", "."));
     return Number.isFinite(n) ? n : 0;
-  }
+  };
+  const round2 = (n) => Math.round((n + Number.EPSILON) * 100) / 100;
 
-  return Controller.extend("apm.orders.controller.NewOrder", {
+  return Controller.extend("apm.orders.controller.NewOrderWizard", {
 
     onInit() {
-      const oVM = new JSONModel({
+      const vm = new JSONModel({
+       
+        step1Valid: false,
+        step2Valid: true,
+        step3Valid: false,
+
+       
         customerId: "",
+        customerName: "",
         type: "TICKETS",
+
+    
         itemName: "",
         qty: 1,
         unitPrice: 0,
-        lineTotal: 0,
+        items: [],
         total: 0
       });
-      this.getView().setModel(oVM, "vm");
-      this.onRecalc();
+
+      this.getView().setModel(vm, "vm");
+      this._validateAll();
+    },
+
+    onCustomerChange(oEvent) {
+      const vm = this.getView().getModel("vm");
+      const sId = oEvent.getSource().getSelectedKey();
+      vm.setProperty("/customerId", sId);
+
+      const oItem = oEvent.getSource().getSelectedItem();
+      vm.setProperty("/customerName", oItem ? oItem.getText() : "");
+
+      this._validateAll();
+    },
+
+
+    onTypeChange(oEvent) {
+      const vm = this.getView().getModel("vm");
+      vm.setProperty("/type", oEvent.getSource().getSelectedKey());
+
+     
+      vm.setProperty("/itemName", "");
+      vm.setProperty("/qty", 1);
+      vm.setProperty("/unitPrice", 0);
+      vm.setProperty("/items", []);
+      vm.setProperty("/total", 0);
+
+      this._validateAll();
+    },
+
+    
+    onItemInputChange() {
+      
+      this._validateAll();
+    },
+
+    onQtyChange() {
+      const vm = this.getView().getModel("vm");
+      const qty = Math.max(1, Math.floor(toNumber(vm.getProperty("/qty"))));
+      vm.setProperty("/qty", qty);
+      this._validateAll();
+    },
+
+    onPriceChange() {
+      const vm = this.getView().getModel("vm");
+      const unitPrice = Math.max(0, toNumber(vm.getProperty("/unitPrice")));
+      vm.setProperty("/unitPrice", unitPrice);
+      this._validateAll();
+    },
+
+
+    onAddItem() {
+      const vm = this.getView().getModel("vm");
+
+      const name = String(vm.getProperty("/itemName") || "").trim();
+      const qty = Math.max(1, Math.floor(toNumber(vm.getProperty("/qty"))));
+      const unitPrice = Math.max(0, toNumber(vm.getProperty("/unitPrice")));
+
+      if (!name) {
+        MessageBox.error("Vul een item naam in.");
+        return;
+      }
+      if (qty <= 0) {
+        MessageBox.error("Aantal moet groter zijn dan 0.");
+        return;
+      }
+
+      const lineTotal = round2(qty * unitPrice);
+
+      const items = vm.getProperty("/items").slice();
+      items.push({
+        name,
+        qty,
+        unitPrice: round2(unitPrice),
+        lineTotal
+      });
+
+      vm.setProperty("/items", items);
+
+      
+      vm.setProperty("/itemName", "");
+      vm.setProperty("/qty", 1);
+      vm.setProperty("/unitPrice", 0);
+
+      this._recalcTotal();
+      this._validateAll();
+
+      MessageToast.show("Item toegevoegd");
+    },
+
+    onRemoveItem(oEvent) {
+      const vm = this.getView().getModel("vm");
+      const oRow = oEvent.getSource().getParent(); // ColumnListItem
+      const oCtx = oRow.getBindingContext("vm");
+      const iIndex = Number(oCtx.getPath().split("/").pop());
+
+      const items = vm.getProperty("/items").slice();
+      items.splice(iIndex, 1);
+      vm.setProperty("/items", items);
+
+      this._recalcTotal();
+      this._validateAll();
+    },
+
+    _recalcTotal() {
+      const vm = this.getView().getModel("vm");
+      const items = vm.getProperty("/items") || [];
+      const total = round2(items.reduce((s, it) => s + (Number(it.lineTotal) || 0), 0));
+      vm.setProperty("/total", total);
+    },
+
+    _validateAll() {
+      const vm = this.getView().getModel("vm");
+      const wiz = this.byId("wiz");
+
+      const step1Valid = !!vm.getProperty("/customerId");
+      vm.setProperty("/step1Valid", step1Valid);
+
+      const step2Valid = !!vm.getProperty("/type");
+      vm.setProperty("/step2Valid", step2Valid);
+
+      const items = vm.getProperty("/items") || [];
+      const step3Valid = items.length > 0 && items.every(it => Number(it.qty) > 0);
+      vm.setProperty("/step3Valid", step3Valid);
+
+      if (wiz) {
+        const s1 = this.byId("step1");
+        const s2 = this.byId("step2");
+        const s3 = this.byId("step3");
+
+        step1Valid ? wiz.validateStep(s1) : wiz.invalidateStep(s1);
+        step2Valid ? wiz.validateStep(s2) : wiz.invalidateStep(s2);
+        step3Valid ? wiz.validateStep(s3) : wiz.invalidateStep(s3);
+      }
     },
 
     _toDateOnly(d) {
@@ -34,64 +177,28 @@ sap.ui.define([
       return `${yyyy}-${mm}-${dd}`;
     },
 
-    onCustomerChange() {
-      // nothing else needed
-    },
-
-    onTypeChange(oEvent) {
-      const sType = oEvent.getSource().getSelectedKey();
-      this.getView().getModel("vm").setProperty("/type", sType);
-    },
-
-    onRecalc() {
-      const oVM = this.getView().getModel("vm");
-      const qty = Math.max(1, toNumber(oVM.getProperty("/qty")));
-      const unitPrice = toNumber(oVM.getProperty("/unitPrice"));
-      const lineTotal = Math.round(qty * unitPrice * 100) / 100;
-
-      oVM.setProperty("/qty", qty);
-      oVM.setProperty("/unitPrice", unitPrice);
-      oVM.setProperty("/lineTotal", lineTotal);
-      oVM.setProperty("/total", lineTotal);
-    },
-
     async onSubmit() {
-      const oVM = this.getView().getModel("vm");
+      const vm = this.getView().getModel("vm");
 
-      const customerId = oVM.getProperty("/customerId");
-      const type = oVM.getProperty("/type");
-      const itemName = String(oVM.getProperty("/itemName") || "").trim();
-      const qty = toNumber(oVM.getProperty("/qty"));
-      const unitPrice = toNumber(oVM.getProperty("/unitPrice"));
-      const total = toNumber(oVM.getProperty("/total"));
-
-      if (!customerId) {
-        MessageBox.error("Kies een klant.");
-        return;
+      if (!vm.getProperty("/step1Valid")) {
+        return MessageBox.error("Kies een klant.");
       }
-      if (!itemName) {
-        MessageBox.error("Vul een item naam in.");
-        return;
-      }
-      if (qty <= 0) {
-        MessageBox.error("Aantal moet > 0 zijn.");
-        return;
+      if (!vm.getProperty("/step3Valid")) {
+        return MessageBox.error("Voeg minstens één item toe.");
       }
 
       const payload = {
-        orderDate: this._toDateOnly(new Date()),  
+        orderDate: this._toDateOnly(new Date()),
         status: "OPEN",
-        type,
-        customer_ID: customerId,
-        total,
-        items: [
-          {
-            name: itemName,
-            qty,
-            unitPrice,
-            lineTotal: total
-          }
-        ]
+        type: vm.getProperty("/type"),
+        customer_ID: vm.getProperty("/customerId"),
+        total: vm.getProperty("/total"),
+        items: (vm.getProperty("/items") || []).map(it => ({
+          name: it.name,
+          qty: it.qty,
+          unitPrice: it.unitPrice,
+          lineTotal: it.lineTotal
+        }))
       };
 
       try {
@@ -100,13 +207,11 @@ sap.ui.define([
         const oCtx = oOrders.create(payload);
         await oCtx.created();
 
-        const sID = oCtx.getProperty("ID");
+        await oModel.refresh();
         MessageToast.show("Order aangemaakt");
 
-        const oFCL = this.getOwnerComponent().getRootControl().byId("ordersFcl");
-        if (oFCL) oFCL.setLayout("TwoColumnsMidExpanded");
-
-        this.getOwnerComponent().getRouter().navTo("OrderDetail", { ID: sID });
+        
+        this.getOwnerComponent().getRouter().navTo("OrderList", {}, true);
       } catch (e) {
         this.getView().getModel().resetChanges();
         MessageBox.error("Order aanmaken mislukt: " + (e.message || e));
@@ -114,7 +219,7 @@ sap.ui.define([
     },
 
     onCancel() {
-      this.getOwnerComponent().getRouter().navTo("OrderList");
+      this.getOwnerComponent().getRouter().navTo("OrderList", {}, true);
     }
 
   });
