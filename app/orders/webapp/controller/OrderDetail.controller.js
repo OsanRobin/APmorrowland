@@ -1,7 +1,10 @@
-sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
+sap.ui.define([
+  "sap/ui/core/mvc/Controller"
+], function (Controller) {
   "use strict";
 
   return Controller.extend("apm.orders.controller.OrderDetail", {
+
     onInit() {
       this.getOwnerComponent()
         .getRouter()
@@ -21,7 +24,22 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
     },
 
     onBack() {
-      this.getOwnerComponent().getRouter().navTo("OrderList");
+      const oFCL = this.getOwnerComponent()
+        .getRootControl()
+        .byId("ordersFcl");
+
+      if (oFCL) {
+        oFCL.setLayout("OneColumn");
+      }
+
+      const oRouter = this.getOwnerComponent().getRouter();
+
+      if (oRouter.getRoute("OrderList")) {
+        oRouter.navTo("OrderList", {}, true);
+      } else if (oRouter.getRoute("Orders")) {
+        oRouter.navTo("Orders", {}, true);
+      }
     }
+
   });
 });

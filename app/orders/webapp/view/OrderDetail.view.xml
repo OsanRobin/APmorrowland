@@ -11,7 +11,7 @@
 
     <content>
 
-      <!-- BOVENAAN: klant + type + status -->
+    
       <ObjectHeader
         title="{= ${customer/name} || 'Onbekende klant' }"
         number="{total}"
@@ -29,7 +29,7 @@
         </statuses>
       </ObjectHeader>
 
-      <!-- ITEMS -->
+    
       <Table
         inset="false"
         headerText="Items"
@@ -62,7 +62,7 @@
         </items>
       </Table>
 
-      <!-- ONDERAAN: totaal -->
+    
       <Toolbar>
         <ToolbarSpacer />
         <Title text="Totaal:" level="H4" />
