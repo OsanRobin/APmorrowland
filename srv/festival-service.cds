@@ -14,17 +14,17 @@ service FestivalService {
   entity Customers     as projection on apm.Customers;
 
 @readonly
-entity Leaderboard as select from Reviews as r
-  inner join Artists as a on r.artist.ID = a.ID
+entity Leaderboard as select from Artists as a
+  left join Reviews as r on r.artist.ID = a.ID
 {
   key a.ID as artistID,
       a.name as artistName,
 
-      // expliciet type geven
-      cast(avg(r.rating) as Decimal(3,2)) as avgRating,
-      cast(count(1)      as Integer)     as reviewCount
+      cast(coalesce(avg(r.rating), 0) as Decimal(3,2)) as avgRating,
+      cast(count(r.ID)               as Integer)       as reviewCount
 }
 group by a.ID, a.name;
+
 
 
 }
