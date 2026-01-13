@@ -1,51 +1,101 @@
 <mvc:View
-  controllerName="apm.lineup.controller.Lineup"
   xmlns:mvc="sap.ui.core.mvc"
   xmlns="sap.m"
-  xmlns:core="sap.ui.core">
+  xmlns:core="sap.ui.core"
+  xmlns:unified="sap.ui.unified"
+  controllerName="apm.lineup.controller.Lineup"
+  height="100%">
 
-  <App>
-    <Page title="Line-up &amp; Planning">
+  <App height="100%" class="sapUiSizeCozy">
+    <Page
+      id="paginaLineUp"
+      title="Line-up &amp; Planning"
+      showNavButton="true"
+      navButtonPress=".onNavBack"
+      enableScrolling="false">
+
       <content>
-        <VBox class="sapUiSmallMargin" width="100%">
+        <VBox width="100%" height="100%">
 
-          <Toolbar>
-            <Title text="Dagoverzicht"/>
-            <ToolbarSpacer/>
-            <Button text="Refresh" press=".onRefresh"/>
-          </Toolbar>
-
-          <HBox class="sapUiSmallMarginTop" alignItems="Center" width="100%">
-            <Text text="Festivaldag:" width="7rem"/>
+          <OverflowToolbar>
+            <Label text="Stage" labelFor="selStage"/>
             <Select
-              width="18rem"
-              items="{vm>/days}"
-              selectedKey="{vm>/selectedDayId}"
-              change=".onDayChange">
-              <core:Item key="{vm>ID}" text="{vm>label}" />
+              id="selStage"
+              width="14rem"
+              selectedKey="{filters>/selectedStageId}"
+              change=".onFilterChange"
+              items="{filters>/stages}">
+              <core:Item key="{filters>ID}" text="{filters>stageNaam}"/>
             </Select>
-          </HBox>
 
-          <Text text="Stages" class="sapUiSmallMarginTop"/>
+            <ToolbarSpacer width="0.5rem"/>
 
-          <List items="{path:'vm>/stages', templateShareable:false}">
-            <CustomListItem>
-              <VBox class="sapUiSmallMargin" width="100%">
-                <Title text="{vm>name}" level="H3"/>
+            <Label text="Artiest" labelFor="selArtiest"/>
+            <Select
+              id="selArtiest"
+              width="16rem"
+              selectedKey="{filters>/selectedArtiestId}"
+              change=".onFilterChange"
+              items="{filters>/artiesten}">
+              <core:Item key="{filters>ID}" text="{filters>artiestNaam}"/>
+            </Select>
 
-                <List
-                  items="{path:'vm>performances', templateShareable:false}"
-                  noDataText="Geen optredens op deze stage">
-                  <StandardListItem
-                    title="{vm>artistName}"
-                    description="{vm>start} - {vm>end}  |  {vm>genre}"
-                    type="Active"
-                    press=".onPerformancePress"/>
-                </List>
+            <ToolbarSpacer/>
 
-              </VBox>
-            </CustomListItem>
-          </List>
+            <Label text="Weergave" labelFor="selView"/>
+            <Select
+              id="selView"
+              width="12rem"
+              selectedKey="{lineup>/viewKey}"
+              change=".onViewChange"
+              items="{filters>/views}">
+              <core:Item key="{filters>key}" text="{filters>text}"/>
+            </Select>
+
+            <ToolbarSeparator/>
+            <Button text="Vernieuwen" press=".onRefresh"/>
+          </OverflowToolbar>
+
+          <PlanningCalendar
+            id="pcLineUp"
+            height="100%"
+            startDate="{lineup>/startDate}"
+            viewKey="{lineup>/viewKey}"
+            appointmentSelect=".onAppointmentSelect"
+            rows="{lineup>/rows}"
+            showEmptyIntervalHeaders="true"
+            showIntervalHeaders="true"
+            stickyHeader="true">
+
+            <views>
+              <PlanningCalendarView key="Day" intervalType="Hour" description="Dag" intervalsS="12" intervalsM="15" intervalsL="15"/>
+              <PlanningCalendarView key="Week" intervalType="Day" description="Week" intervalsS="3" intervalsM="7" intervalsL="7"/>
+            </views>
+
+            <rows>
+              <PlanningCalendarRow
+                title="{lineup>stageNaam}"
+                text="{lineup>stageSubText}"
+                icon="sap-icon://microphone"
+                enableAppointmentsDragAndDrop="false"
+                enableAppointmentsResize="false"
+                appointments="{
+                  path: 'lineup>appointments',
+                  templateShareable: false
+                }">
+
+                <appointments>
+                  <unified:CalendarAppointment
+                    title="{lineup>title}"
+                    text="{lineup>text}"
+                    startDate="{lineup>startDate}"
+                    endDate="{lineup>endDate}" />
+                </appointments>
+
+              </PlanningCalendarRow>
+            </rows>
+
+          </PlanningCalendar>
 
         </VBox>
       </content>

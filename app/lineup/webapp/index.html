@@ -9,7 +9,7 @@
     id="sap-ui-bootstrap"
     src="https://ui5.sap.com/resources/sap-ui-core.js"
     data-sap-ui-theme="sap_horizon"
-    data-sap-ui-libs="sap.m,sap.ui.core"
+    data-sap-ui-libs="sap.m,sap.ui.core,sap.ui.unified"
     data-sap-ui-async="true"
     data-sap-ui-compatVersion="edge"
     data-sap-ui-resourceroots='{
@@ -19,8 +19,23 @@
 
   <script>
     sap.ui.getCore().attachInit(function () {
-      sap.ui.require(["sap/ui/core/mvc/XMLView"], function (XMLView) {
+      sap.ui.require([
+        "sap/ui/core/mvc/XMLView",
+        "sap/ui/model/odata/v4/ODataModel"
+      ], function (XMLView, ODataModel) {
+
+        var oModel = new ODataModel({
+          serviceUrl: "/odata/v4/festival/",
+          synchronizationMode: "None",
+          operationMode: "Server",
+          autoExpandSelect: true,
+          earlyRequests: true
+        });
+
+        sap.ui.getCore().setModel(oModel);
+
         XMLView.create({ viewName: "apm.lineup.view.Lineup" }).then(function (oView) {
+          oView.setModel(oModel);
           oView.placeAt("content");
         });
       });
